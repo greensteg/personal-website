@@ -74,7 +74,7 @@ async function renderMarkdownContent(containerId, filePath) {
 function applyContentStyling(container) {
     // Style headings
     container.querySelectorAll('h1').forEach(h1 => {
-        h1.className = 'text-5xl font-light mb-6 text-gray-900 tracking-wide';
+        h1.className = 'text-3xl sm:text-4xl md:text-5xl font-light mb-4 sm:mb-6 text-gray-900 tracking-wide';
         // Handle name styling in h1
         if (h1.textContent.includes("I'm Wentong")) {
             h1.innerHTML = h1.innerHTML.replace('Wentong', '<span class="font-medium">Wentong</span>');
@@ -82,19 +82,19 @@ function applyContentStyling(container) {
     });
     
     container.querySelectorAll('h2').forEach(h2 => {
-        h2.className = 'text-2xl font-medium text-gray-900 mb-6 mt-8 tracking-wide';
+        h2.className = 'text-xl sm:text-2xl font-medium text-gray-900 mb-4 sm:mb-6 mt-6 sm:mt-8 tracking-wide';
     });
     
     container.querySelectorAll('h3').forEach(h3 => {
-        h3.className = 'text-xl font-medium text-gray-900 mb-4 mt-6 tracking-wide';
+        h3.className = 'text-lg sm:text-xl font-medium text-gray-900 mb-3 sm:mb-4 mt-4 sm:mt-6 tracking-wide';
     });
     
     // Style paragraphs
     container.querySelectorAll('p').forEach((p, index) => {
         if (index === 0 && container.id === 'aboutContent') {
-            p.className = 'text-xl text-gray-600 mb-8 leading-loose';
+            p.className = 'text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 leading-loose';
         } else {
-            p.className = 'text-gray-600 leading-loose mb-6';
+            p.className = 'text-gray-600 leading-loose mb-4 sm:mb-6 text-sm sm:text-base';
         }
     });
     

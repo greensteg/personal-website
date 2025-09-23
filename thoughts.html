@@ -15,8 +15,8 @@
     <!-- Navigation will be inserted here by JavaScript -->
 
     <!-- Thoughts Page -->
-    <section class="min-h-screen py-20 pt-32">
-        <div class="max-w-3xl mx-auto px-6">
+    <section class="min-h-screen py-12 sm:py-20 pt-20 sm:pt-32">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6">
 
             <!-- Blog Posts Container -->
             <div id="blogPosts">
@@ -87,8 +87,8 @@
             // Check if there are no posts to display
             if (blogPosts.length === 0) {
                 container.innerHTML = `
-                    <div class="bg-white rounded-lg p-8 shadow-sm text-center">
-                        <p class="text-gray-600 text-lg">Check back later for posts, nothing here currently.</p>
+                    <div class="bg-white rounded-lg p-6 sm:p-8 shadow-sm text-center">
+                        <p class="text-gray-600 text-base sm:text-lg">Check back later for posts, nothing here currently.</p>
                     </div>
                 `;
                 return;
@@ -96,7 +96,7 @@
 
             blogPosts.forEach(post => {
                 const postElement = document.createElement('article');
-                postElement.className = 'bg-white rounded-lg p-8 mb-8 shadow-sm cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
+                postElement.className = 'bg-white rounded-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-sm cursor-pointer hover:shadow-md sm:hover:scale-[1.02] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
 
                 // Create preview (first 3 lines or ~150 characters)
                 const lines = post.content.split('\n').filter(line => line.trim() !== '');
@@ -104,12 +104,12 @@
                 const truncatedPreview = preview.length > 150 ? preview.substring(0, 150) + '...' : preview + '...';
 
                 postElement.innerHTML = `
-                    <div class="mb-4">
-                        <time class="text-sm text-gray-500">${post.date}</time>
+                    <div class="mb-3 sm:mb-4">
+                        <time class="text-xs sm:text-sm text-gray-500">${post.date}</time>
                     </div>
-                    <h3 class="text-xl font-medium text-gray-900 mb-4 tracking-wide">${post.title}</h3>
-                    <div class="text-gray-600 leading-loose whitespace-pre-line mb-4">${truncatedPreview}</div>
-                    <span class="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200">Read more →</span>
+                    <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-3 sm:mb-4 tracking-wide">${post.title}</h3>
+                    <div class="text-gray-600 leading-loose whitespace-pre-line mb-3 sm:mb-4 text-sm sm:text-base">${truncatedPreview}</div>
+                    <span class="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 text-sm sm:text-base">Read more →</span>
                 `;
 
                 postElement.onclick = () => {
