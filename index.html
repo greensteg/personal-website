@@ -129,6 +129,49 @@
             }
         }
 
+        // Enhanced link handler for static links
+        function handleStaticLinks(container) {
+            // Handle all links in the container
+            container.querySelectorAll('a').forEach(link => {
+                const href = link.getAttribute('href');
+                
+                // Skip external links and mailto links
+                if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) {
+                    return;
+                }
+                
+                // Handle internal navigation links
+                if (href === '/about' || href === '/thoughts' || href === '/contact') {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateTo(href.slice(1)); // Remove leading slash
+                    });
+                }
+                
+                // Handle blog post links (format: /thoughts/post-id)
+                else if (href.startsWith('/thoughts/')) {
+                    const postId = parseInt(href.split('/')[2]);
+                    if (postId) {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            navigateTo('post', postId);
+                        });
+                    }
+                }
+                
+                // Handle relative links by converting them to absolute internal links
+                else if (!href.startsWith('/')) {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        // For relative links, assume they're internal navigation
+                        if (href === 'about' || href === 'thoughts' || href === 'contact') {
+                            navigateTo(href);
+                        }
+                    });
+                }
+            });
+        }
+
         // Load and render markdown content
         async function renderMarkdownContent(containerId, filePath) {
             const content = await loadContent(filePath);
@@ -147,6 +190,9 @@
             
             // Apply styling to rendered content
             applyContentStyling(container);
+            
+            // Handle static links in the rendered content
+            handleStaticLinks(container);
         }
 
         // Apply Tailwind styling to rendered markdown
@@ -175,6 +221,11 @@
                 } else {
                     p.className = 'text-gray-600 leading-relaxed mb-6';
                 }
+            });
+            
+            // Style links
+            container.querySelectorAll('a').forEach(a => {
+                a.className = 'text-gray-900 underline hover:text-gray-600 transition-colors';
             });
             
             // Style lists
@@ -227,66 +278,50 @@
             renderBlogPosts();
         }
 
-        // URL routing and navigation
+        // URL routing and navigation (hash-based)
         function navigateTo(page, postId = null) {
-            let url;
+            let hash;
             
             switch(page) {
                 case 'about':
-                    url = '/about';
+                    hash = '#/about';
                     break;
                 case 'thoughts':
-                    url = '/thoughts';
+                    hash = '#/thoughts';
                     break;
                 case 'contact':
-                    url = '/contact';
+                    hash = '#/contact';
                     break;
                 case 'post':
-                    url = `/thoughts/${postId}`;
+                    hash = `#/thoughts/${postId}`;
                     break;
                 default:
-                    url = '/about';
+                    hash = '#/about';
             }
             
-            // Update URL and browser history
-            history.pushState({ page: page, postId: postId }, '', url);
-            
-            // Show the appropriate page
-            if (page === 'post') {
-                showSinglePost(postId, false);
-            } else {
-                showPage(page, false);
-            }
+            // Update URL hash
+            window.location.hash = hash;
         }
 
-        // Handle browser back/forward buttons
-        window.addEventListener('popstate', function(event) {
-            if (event.state) {
-                if (event.state.page === 'post' && event.state.postId) {
-                    showSinglePost(event.state.postId, false);
-                } else {
-                    showPage(event.state.page, false);
-                }
-            } else {
-                // No state, determine from URL
-                handleInitialRoute();
-            }
+        // Handle hash changes
+        window.addEventListener('hashchange', function() {
+            handleHashRoute();
         });
 
-        // Parse URL and show appropriate page
-        function handleInitialRoute() {
-            const path = window.location.pathname;
+        // Parse hash and show appropriate page
+        function handleHashRoute() {
+            const hash = window.location.hash.slice(1) || '/about'; // Remove # and default to /about
             
-            if (path === '/' || path === '/about' || path === '') {
-                showPage('about', false);
-            } else if (path === '/thoughts') {
-                showPage('thoughts', false);
-            } else if (path === '/contact') {
-                showPage('contact', false);
-            } else if (path.startsWith('/thoughts/')) {
-                const postId = parseInt(path.split('/')[2]);
+            if (hash === '/about' || hash === '/') {
+                showPage('about');
+            } else if (hash === '/thoughts') {
+                showPage('thoughts');
+            } else if (hash === '/contact') {
+                showPage('contact');
+            } else if (hash.startsWith('/thoughts/')) {
+                const postId = parseInt(hash.split('/')[2]);
                 if (postId && blogPosts.find(p => p.id === postId)) {
-                    showSinglePost(postId, false);
+                    showSinglePost(postId);
                 } else {
                     // Invalid post ID, redirect to thoughts
                     navigateTo('thoughts');
@@ -297,8 +332,12 @@
             }
         }
 
+        function handleInitialRoute() {
+            handleHashRoute();
+        }
+
         // Page management - loads content from files only
-        function showPage(pageId, updateUrl = true) {
+        function showPage(pageId) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -319,12 +358,6 @@
                 link.classList.remove('text-gray-900', 'font-medium');
                 link.classList.add('text-gray-600');
             });
-            
-            // Update URL if needed
-            if (updateUrl) {
-                navigateTo(pageId);
-                return; // navigateTo will call showPage again with updateUrl=false
-            }
             
             // Scroll to top
             window.scrollTo(0, 0);
@@ -358,7 +391,7 @@
             });
         }
 
-        function showSinglePost(postId, updateUrl = true) {
+        function showSinglePost(postId) {
             const post = blogPosts.find(p => p.id === postId);
             if (!post) {
                 navigateTo('thoughts');
@@ -366,27 +399,32 @@
             }
             
             const singlePostContent = document.getElementById('singlePostContent');
+            
+            // Render the post content as markdown
+            const postHtml = marked.parse(post.content);
+            
             singlePostContent.innerHTML = `
                 <article class="max-w-3xl">
                     <div class="mb-6">
                         <time class="text-sm text-gray-500">${post.date}</time>
                     </div>
                     <h1 class="text-3xl font-light text-gray-900 mb-8">${post.title}</h1>
-                    <div class="text-gray-600 leading-relaxed whitespace-pre-line prose prose-lg max-w-none">${post.content}</div>
+                    <div class="prose prose-lg max-w-none">${postHtml}</div>
                 </article>
             `;
+            
+            // Apply styling to the rendered content
+            const contentDiv = singlePostContent.querySelector('.prose');
+            applyContentStyling(contentDiv);
+            
+            // Handle static links in the post content
+            handleStaticLinks(contentDiv);
             
             // Hide all pages and show single post
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
             document.getElementById('singlePost').classList.add('active');
-            
-            // Update URL if needed
-            if (updateUrl) {
-                navigateTo('post', postId);
-                return;
-            }
             
             // Scroll to top
             window.scrollTo(0, 0);
