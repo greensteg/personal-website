@@ -1,6 +1,7 @@
 {
     "posts": [
-      "content/posts/post-1.md"
+      "content/posts/post-1.md",
+      "content/posts/draft-post.md"
     ],
     "lastUpdated": "2024-03-15T10:00:00Z"
   }

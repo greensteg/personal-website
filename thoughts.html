@@ -53,23 +53,27 @@
         // Load blog posts from markdown files
         async function loadBlogPosts() {
             blogPosts = [];
-            
+
             const postFiles = await discoverBlogPosts();
-            
+
             for (const postFile of postFiles) {
                 const content = await loadContent(postFile);
                 if (content) {
                     const { frontMatter, content: markdownContent } = parseFrontMatter(content);
-                    blogPosts.push({
-                        id: parseInt(frontMatter.id) || Date.now(),
-                        title: frontMatter.title || 'Untitled',
-                        date: frontMatter.date || 'Unknown date',
-                        content: markdownContent,
-                        slug: frontMatter.slug || postFile.split('/').pop().replace('.md', '')
-                    });
+                    // Only include posts where display is true or undefined (default to true for backwards compatibility)
+                    const shouldDisplay = frontMatter.display !== false;
+                    if (shouldDisplay) {
+                        blogPosts.push({
+                            id: parseInt(frontMatter.id) || Date.now(),
+                            title: frontMatter.title || 'Untitled',
+                            date: frontMatter.date || 'Unknown date',
+                            content: markdownContent,
+                            slug: frontMatter.slug || postFile.split('/').pop().replace('.md', '')
+                        });
+                    }
                 }
             }
-            
+
             // Sort posts by date (newest first)
             blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
             renderBlogPosts();
