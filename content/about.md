@@ -1,4 +1,4 @@
-## Hey, I'm Wentong.
+Hey, I'm Wentong.
 
 I grew up in Wisconsin and went to college on the East Coast.
 
