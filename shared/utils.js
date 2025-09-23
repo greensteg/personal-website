@@ -66,7 +66,7 @@ async function renderMarkdownContent(containerId, filePath) {
 function applyContentStyling(container) {
     // Style headings
     container.querySelectorAll('h1').forEach(h1 => {
-        h1.className = 'text-5xl font-light mb-6 text-gray-900';
+        h1.className = 'text-5xl font-light mb-6 text-gray-900 tracking-wide';
         // Handle name styling in h1
         if (h1.textContent.includes("I'm Wentong")) {
             h1.innerHTML = h1.innerHTML.replace('Wentong', '<span class="font-medium">Wentong</span>');
@@ -74,25 +74,25 @@ function applyContentStyling(container) {
     });
     
     container.querySelectorAll('h2').forEach(h2 => {
-        h2.className = 'text-2xl font-medium text-gray-900 mb-6 mt-8';
+        h2.className = 'text-2xl font-medium text-gray-900 mb-6 mt-8 tracking-wide';
     });
     
     container.querySelectorAll('h3').forEach(h3 => {
-        h3.className = 'text-xl font-medium text-gray-900 mb-4 mt-6';
+        h3.className = 'text-xl font-medium text-gray-900 mb-4 mt-6 tracking-wide';
     });
     
     // Style paragraphs
     container.querySelectorAll('p').forEach((p, index) => {
         if (index === 0 && container.id === 'aboutContent') {
-            p.className = 'text-xl text-gray-600 mb-8 leading-relaxed';
+            p.className = 'text-xl text-gray-600 mb-8 leading-loose';
         } else {
-            p.className = 'text-gray-600 leading-relaxed mb-6';
+            p.className = 'text-gray-600 leading-loose mb-6';
         }
     });
     
     // Style links
     container.querySelectorAll('a').forEach(a => {
-        a.className = 'text-gray-900 underline hover:text-gray-600 transition-colors';
+        a.className = 'text-blue-600 underline hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded';
     });
     
     // Style lists

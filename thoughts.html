@@ -11,13 +11,13 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-slate-50 text-gray-800">
     <!-- Navigation will be inserted here by JavaScript -->
 
     <!-- Thoughts Page -->
     <section class="min-h-screen py-20 pt-32">
-        <div class="max-w-4xl mx-auto px-6">
-            <h1 class="text-4xl font-light mb-12 text-gray-900">Thoughts</h1>
+        <div class="max-w-3xl mx-auto px-6">
+            <h1 class="text-4xl font-light mb-12 text-gray-900 tracking-wide">Thoughts</h1>
 
             <!-- Blog Posts Container -->
             <div id="blogPosts">
@@ -83,7 +83,7 @@
             
             blogPosts.forEach(post => {
                 const postElement = document.createElement('article');
-                postElement.className = 'bg-white rounded-lg p-8 mb-8 shadow-sm cursor-pointer hover:shadow-md transition-shadow';
+                postElement.className = 'bg-white rounded-lg p-8 mb-8 shadow-sm cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
                 
                 // Create preview (first 3 lines or ~150 characters)
                 const lines = post.content.split('\n').filter(line => line.trim() !== '');
@@ -94,9 +94,9 @@
                     <div class="mb-4">
                         <time class="text-sm text-gray-500">${post.date}</time>
                     </div>
-                    <h3 class="text-xl font-medium text-gray-900 mb-4">${post.title}</h3>
-                    <div class="text-gray-600 leading-relaxed whitespace-pre-line mb-4">${truncatedPreview}</div>
-                    <span class="text-gray-900 font-medium hover:text-gray-600 transition-colors">Read more →</span>
+                    <h3 class="text-xl font-medium text-gray-900 mb-4 tracking-wide">${post.title}</h3>
+                    <div class="text-gray-600 leading-loose whitespace-pre-line mb-4">${truncatedPreview}</div>
+                    <span class="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200">Read more →</span>
                 `;
                 
                 postElement.onclick = () => {

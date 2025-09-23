@@ -4,13 +4,13 @@ function createNavigation(currentPage = '') {
     nav.className = 'fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50';
     
     nav.innerHTML = `
-        <div class="max-w-4xl mx-auto px-6 py-4">
+        <div class="max-w-3xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="font-semibold text-lg">Wentong Zhang</a>
+                <a href="index.html" class="font-semibold text-lg tracking-wide hover:text-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Wentong Zhang</a>
                 <div class="space-x-6">
-                    <a href="index.html" class="nav-link ${currentPage === 'about' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900 transition-colors'}">About</a>
-                    <a href="thoughts.html" class="nav-link ${currentPage === 'thoughts' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900 transition-colors'}">Thoughts</a>
-                    <a href="contact.html" class="nav-link ${currentPage === 'contact' ? 'text-gray-900 font-medium' : 'text-gray-600 hover:text-gray-900 transition-colors'}">Contact</a>
+                    <a href="index.html" class="nav-link ${currentPage === 'about' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1">About</a>
+                    <a href="thoughts.html" class="nav-link ${currentPage === 'thoughts' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1">Thoughts</a>
+                    <a href="contact.html" class="nav-link ${currentPage === 'contact' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1">Contact</a>
                 </div>
             </div>
         </div>
