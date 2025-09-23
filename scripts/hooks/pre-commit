@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Pre-commit hook to automatically update content/posts/index.json
+# when posts are added, modified, or deleted
+
+POSTS_DIR="content/posts"
+INDEX_FILE="$POSTS_DIR/index.json"
+
+# Check if posts directory exists
+if [ ! -d "$POSTS_DIR" ]; then
+    exit 0
+fi
+
+# Find all .md files in posts directory (excluding index.json)
+posts=$(find "$POSTS_DIR" -name "*.md" -type f | sort)
+
+# Generate the posts array in JSON format
+posts_json=""
+first=true
+for post in $posts; do
+    if [ "$first" = true ]; then
+        posts_json="\"$post\""
+        first=false
+    else
+        posts_json="$posts_json,\n      \"$post\""
+    fi
+done
+
+# Generate timestamp
+timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+# Create new index.json content
+new_content="{
+    \"posts\": [
+      $posts_json
+    ],
+    \"lastUpdated\": \"$timestamp\"
+  }"
+
+# Only update if there are posts found, otherwise create empty structure
+if [ -z "$posts_json" ]; then
+    new_content="{
+    \"posts\": [],
+    \"lastUpdated\": \"$timestamp\"
+  }"
+fi
+
+# Write the new content to index.json
+echo -e "$new_content" > "$INDEX_FILE"
+
+# Add the updated index.json to the commit if it was modified
+git add "$INDEX_FILE"
+
+echo "Updated $INDEX_FILE with current posts"
+exit 0

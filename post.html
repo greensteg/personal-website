@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post - Wentong Zhang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+    <!-- Navigation will be inserted here by JavaScript -->
+
+    <!-- Single Post View -->
+    <section class="min-h-screen py-20 pt-32">
+        <div class="max-w-3xl mx-auto px-6">
+            <a href="thoughts.html" class="text-blue-600 hover:text-blue-700 mb-8 flex items-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1">
+                ← Back to Thoughts
+            </a>
+            <div id="singlePostContent">
+                <!-- Single post content will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="shared/utils.js"></script>
+    <script src="shared/nav.js"></script>
+    <script>
+        // Initialize navigation
+        initNavigation();
+
+        // Get post ID from URL parameters
+        function getPostIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get('id')) || null;
+        }
+
+        // Auto-discover blog posts from index file
+        async function discoverBlogPosts() {
+            try {
+                const response = await fetch('content/posts/index.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const postsIndex = await response.json();
+                return postsIndex.posts || [];
+            } catch (error) {
+                console.error('Failed to load posts index:', error);
+                return [];
+            }
+        }
+
+        // Find and load specific post
+        async function loadPost(postId) {
+            const postFiles = await discoverBlogPosts();
+            
+            // Find the post file by loading each one and checking the ID
+            for (const postFile of postFiles) {
+                const content = await loadContent(postFile);
+                if (content) {
+                    const { frontMatter, content: markdownContent } = parseFrontMatter(content);
+                    if (parseInt(frontMatter.id) === postId) {
+                        return {
+                            id: parseInt(frontMatter.id),
+                            title: frontMatter.title || 'Untitled',
+                            date: frontMatter.date || 'Unknown date',
+                            content: markdownContent
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Apply styling specifically for blog posts
+        function applyPostStyling(container) {
+            // Style headings
+            container.querySelectorAll('h1').forEach(h1 => {
+                h1.className = 'text-3xl font-light text-gray-900 mb-8 tracking-wide';
+            });
+            
+            container.querySelectorAll('h2').forEach(h2 => {
+                h2.className = 'text-2xl font-medium text-gray-900 mb-6 mt-8 tracking-wide';
+            });
+            
+            container.querySelectorAll('h3').forEach(h3 => {
+                h3.className = 'text-xl font-medium text-gray-900 mb-4 mt-6 tracking-wide';
+            });
+            
+            // Style paragraphs
+            container.querySelectorAll('p').forEach(p => {
+                p.className = 'text-gray-600 leading-loose mb-6';
+            });
+            
+            // Style links
+            container.querySelectorAll('a').forEach(a => {
+                a.className = 'text-blue-600 underline hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded';
+            });
+            
+            // Style lists
+            container.querySelectorAll('ul').forEach(ul => {
+                ul.className = 'space-y-2 mb-6';
+            });
+            
+            container.querySelectorAll('li').forEach(li => {
+                li.className = 'text-gray-600';
+            });
+
+            // Style blockquotes
+            container.querySelectorAll('blockquote').forEach(bq => {
+                bq.className = 'border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-6';
+            });
+
+            // Style code blocks
+            container.querySelectorAll('pre').forEach(pre => {
+                pre.className = 'bg-gray-100 rounded-lg p-4 overflow-x-auto mb-6';
+            });
+
+            container.querySelectorAll('code').forEach(code => {
+                if (code.parentElement.tagName !== 'PRE') {
+                    code.className = 'bg-gray-100 rounded px-1 py-0.5 text-sm';
+                }
+            });
+        }
+
+        // Load and display the post
+        async function displayPost() {
+            const postId = getPostIdFromUrl();
+            
+            if (!postId) {
+                // No post ID, redirect to thoughts page
+                window.location.href = 'thoughts.html';
+                return;
+            }
+            
+            const post = await loadPost(postId);
+            
+            if (!post) {
+                // Post not found, redirect to thoughts page
+                window.location.href = 'thoughts.html';
+                return;
+            }
+
+            // Update page title
+            document.title = `${post.title} - Wentong Zhang`;
+            
+            // Render the post
+            const postHtml = marked.parse(post.content);
+            
+            const singlePostContent = document.getElementById('singlePostContent');
+            singlePostContent.innerHTML = `
+                <article class="max-w-2xl">
+                    <div class="mb-6">
+                        <time class="text-sm text-gray-500">${post.date}</time>
+                    </div>
+                    <h1 class="text-3xl font-light text-gray-900 mb-8 tracking-wide">${post.title}</h1>
+                    <div class="prose prose-lg max-w-none">${postHtml}</div>
+                </article>
+            `;
+            
+            // Apply styling to the rendered content
+            const contentDiv = singlePostContent.querySelector('.prose');
+            applyPostStyling(contentDiv);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayPost();
+        });
+    </script>
+</body>
+</html>

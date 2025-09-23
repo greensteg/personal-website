@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thoughts - Wentong Zhang</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-gray-800">
+    <!-- Navigation will be inserted here by JavaScript -->
+
+    <!-- Thoughts Page -->
+    <section class="min-h-screen py-20 pt-32">
+        <div class="max-w-3xl mx-auto px-6">
+
+            <!-- Blog Posts Container -->
+            <div id="blogPosts">
+                <!-- Posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="shared/utils.js"></script>
+    <script src="shared/nav.js"></script>
+    <script>
+        // Initialize navigation
+        initNavigation('thoughts');
+
+        // Blog posts data
+        let blogPosts = [];
+
+        // Auto-discover blog posts from index file
+        async function discoverBlogPosts() {
+            try {
+                const response = await fetch('content/posts/index.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const postsIndex = await response.json();
+                return postsIndex.posts || [];
+            } catch (error) {
+                console.error('Failed to load posts index:', error);
+                return [];
+            }
+        }
+
+        // Load blog posts from markdown files
+        async function loadBlogPosts() {
+            blogPosts = [];
+
+            const postFiles = await discoverBlogPosts();
+
+            for (const postFile of postFiles) {
+                const content = await loadContent(postFile);
+                if (content) {
+                    const { frontMatter, content: markdownContent } = parseFrontMatter(content);
+                    // Only include posts where display is true or undefined (default to true for backwards compatibility)
+                    const shouldDisplay = frontMatter.display !== false;
+                    if (shouldDisplay) {
+                        blogPosts.push({
+                            id: parseInt(frontMatter.id) || Date.now(),
+                            title: frontMatter.title || 'Untitled',
+                            date: frontMatter.date || 'Unknown date',
+                            content: markdownContent,
+                            slug: frontMatter.slug || postFile.split('/').pop().replace('.md', '')
+                        });
+                    }
+                }
+            }
+
+            // Sort posts by date (newest first)
+            blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            renderBlogPosts();
+        }
+
+        // Blog functionality
+        function renderBlogPosts() {
+            const container = document.getElementById('blogPosts');
+            container.innerHTML = '';
+
+            // Check if there are no posts to display
+            if (blogPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-lg p-8 shadow-sm text-center">
+                        <p class="text-gray-600 text-lg">Check back later for posts, nothing here currently.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            blogPosts.forEach(post => {
+                const postElement = document.createElement('article');
+                postElement.className = 'bg-white rounded-lg p-8 mb-8 shadow-sm cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
+
+                // Create preview (first 3 lines or ~150 characters)
+                const lines = post.content.split('\n').filter(line => line.trim() !== '');
+                const preview = lines.slice(0, 3).join('\n');
+                const truncatedPreview = preview.length > 150 ? preview.substring(0, 150) + '...' : preview + '...';
+
+                postElement.innerHTML = `
+                    <div class="mb-4">
+                        <time class="text-sm text-gray-500">${post.date}</time>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-900 mb-4 tracking-wide">${post.title}</h3>
+                    <div class="text-gray-600 leading-loose whitespace-pre-line mb-4">${truncatedPreview}</div>
+                    <span class="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200">Read more →</span>
+                `;
+
+                postElement.onclick = () => {
+                    window.location.href = `post.html?id=${post.id}`;
+                };
+                container.appendChild(postElement);
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogPosts();
+        });
+    </script>
+</body>
+</html>
