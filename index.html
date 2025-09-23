@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Personal Website</title>
+    <title>Wentong Zhang</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html {
@@ -22,7 +22,7 @@
     <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50">
         <div class="max-w-4xl mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
-                <a href="#" onclick="navigateTo('about')" class="font-semibold text-lg">Your Name</a>
+                <a href="#" onclick="navigateTo('about')" class="font-semibold text-lg">Wentong Zhang</a>
                 <div class="space-x-6">
                     <a href="#" onclick="navigateTo('about')" class="nav-link text-gray-600 hover:text-gray-900 transition-colors">About</a>
                     <a href="#" onclick="navigateTo('thoughts')" class="nav-link text-gray-600 hover:text-gray-900 transition-colors">Thoughts</a>
@@ -81,15 +81,6 @@
             </div>
         </section>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 py-8">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <p class="text-gray-600">
-                © 2024 Your Name. Built with care and curiosity.
-            </p>
-        </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
@@ -164,8 +155,8 @@
             container.querySelectorAll('h1').forEach(h1 => {
                 h1.className = 'text-5xl font-light mb-6 text-gray-900';
                 // Handle name styling in h1
-                if (h1.textContent.includes("I'm Your Name")) {
-                    h1.innerHTML = h1.innerHTML.replace('Your Name', '<span class="font-medium">Your Name</span>');
+                if (h1.textContent.includes("I'm Wentong Zhang.")) {
+                    h1.innerHTML = h1.innerHTML.replace('Wentong Zhang', '<span class="font-medium">Wentong Zhang</span>');
                 }
             });
             
