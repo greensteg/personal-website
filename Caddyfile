@@ -1,0 +1,18 @@
+{
+	# Set your domain here. Use :80 for local development without HTTPS.
+	# For production with auto-HTTPS, replace with your domain:
+	#   www.wentongzhang.com
+}
+
+:80 {
+	root * /srv
+	file_server
+	encode gzip
+
+	# SPA-friendly: try the file, then fall back to index.html
+	try_files {path} {path}/ /index.html
+
+	# Cache static assets
+	@static path *.html *.js *.css *.md *.json
+	header @static Cache-Control "public, max-age=3600"
+}

@@ -1,5 +1,29 @@
 # Personal Website Justfile
 
+# Serve locally with python (no docker needed)
+serve port="8080":
+    python3 -m http.server {{port}}
+
+# Build and start the Docker container
+deploy:
+    ./scripts/deploy.sh
+
+# Stop the running container
+stop:
+    docker compose down
+
+# Rebuild and restart (use after content changes)
+redeploy:
+    docker compose up --build -d
+
+# View container logs
+logs:
+    docker compose logs -f
+
+# Check container status
+status:
+    docker compose ps
+
 # Run setup script and ensure git is installed
 setup:
     #!/usr/bin/env bash

@@ -1,0 +1,7 @@
+.git
+.gitignore
+CLAUDE.md
+justfile
+scripts
+*.md
+!content/**/*.md
