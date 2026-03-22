@@ -1,10 +1,8 @@
-{
-	# Set your domain here. Use :80 for local development without HTTPS.
-	# For production with auto-HTTPS, replace with your domain:
-	#   www.wentongzhang.com
+wentongzhang.com {
+	redir https://www.wentongzhang.com{uri} permanent
 }
 
-:80 {
+www.wentongzhang.com {
 	root * /srv
 	file_server
 	encode gzip
