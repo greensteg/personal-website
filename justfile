@@ -62,28 +62,15 @@ update:
 
 # Enable auto-deploy cron (pulls and rebuilds on new commits every minute)
 autodeploy-on:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    CRON_JOB='* * * * * cd /home/greensteg/personal-website && git fetch origin main && if [ $(git rev-parse HEAD) != $(git rev-parse origin/main) ]; then git pull && docker compose up -d --build; fi'
-    ( (crontab -l 2>/dev/null || true) | (grep -v "personal-website.*git fetch" || true); echo "$CRON_JOB") | crontab -
-    echo "Auto-deploy cron enabled (checks every minute)"
+    ./scripts/autodeploy.sh on
 
 # Disable auto-deploy cron
 autodeploy-off:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    (crontab -l 2>/dev/null || true) | (grep -v "personal-website.*git fetch" || true) | crontab -
-    echo "Auto-deploy cron disabled"
+    ./scripts/autodeploy.sh off
 
 # Check if auto-deploy cron is active
 autodeploy-status:
-    #!/usr/bin/env bash
-    if crontab -l 2>/dev/null | grep -q "personal-website.*git fetch"; then
-        echo "Auto-deploy: ENABLED"
-        crontab -l | grep "personal-website.*git fetch"
-    else
-        echo "Auto-deploy: DISABLED"
-    fi
+    ./scripts/autodeploy.sh status
 
 # Commit changes in posts folder with message of updated/added files
 post:

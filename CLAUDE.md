@@ -24,9 +24,16 @@ A minimalist personal portfolio website for Wentong Zhang, featuring an about pa
 │   └── posts/         # Blog posts
 │       ├── index.json # Posts registry
 │       └── post-1.md  # Example blog post
-└── shared/            # Shared JavaScript utilities
-    ├── nav.js        # Navigation component
-    └── utils.js      # Markdown parsing and rendering utilities
+├── shared/            # Shared JavaScript utilities
+│   ├── nav.js        # Navigation component
+│   └── utils.js      # Markdown parsing and rendering utilities
+├── Dockerfile          # Caddy 2 container image
+├── docker-compose.yml  # Container orchestration
+├── Caddyfile           # Web server config (domain, HTTPS, caching)
+├── justfile            # Task runner commands
+└── scripts/
+    ├── deploy.sh       # Build and start container
+    └── autodeploy.sh   # Manage cron-based auto-deploy
 ```
 
 ## Key Features
@@ -72,10 +79,28 @@ A minimalist personal portfolio website for Wentong Zhang, featuring an about pa
   - Transitions: `duration-200` for smooth animations
 - Container width: `max-w-3xl` (reduced from max-w-4xl)
 
+## Hosting & Deployment
+- **Domain**: www.wentongzhang.com (bare domain redirects to www)
+- **Server**: Self-hosted on CentOS Stream 10 via Docker + Caddy 2
+- **HTTPS**: Auto-provisioned by Caddy via Let's Encrypt
+- **DNS**: Cloudflare (DNS-only mode, not proxied)
+- **Auto-deploy**: Cron job checks every minute for new commits on main, pulls and rebuilds automatically
+  - Enable: `just autodeploy-on`
+  - Disable: `just autodeploy-off`
+  - Check: `just autodeploy-status`
+
+### Useful commands (via justfile)
+- `just deploy` — build and start container
+- `just redeploy` — rebuild after changes
+- `just stop` — stop container
+- `just logs` — view container logs
+- `just status` — check container status
+- `just serve` — local dev server (port 8080)
+
 ## Development Workflow
 - No build process required
 - Direct file editing
-- View changes by refreshing browser
+- Push to main to auto-deploy (within ~1 minute)
 - Add new blog posts by:
   1. Creating markdown file in `content/posts/`
   2. Adding file path to `content/posts/index.json`
@@ -90,10 +115,3 @@ A minimalist personal portfolio website for Wentong Zhang, featuring an about pa
 - No build optimization (relies on CDN)
 - Limited SEO optimization
 - Basic blog functionality (no tags, categories, search)
-
-## Recent Changes
-Based on git history:
-- Fixed navigation issues
-- Large refactor for improved functionality
-- Implemented hash routing (then reverted)
-- Currently on `dev` branch
