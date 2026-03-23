@@ -2,15 +2,23 @@
 set -euo pipefail
 
 REPO_DIR="/home/greensteg/personal-website"
-CRON_JOB="* * * * * cd $REPO_DIR && git fetch origin main && if [ \$(git rev-parse HEAD) != \$(git rev-parse origin/main) ]; then git pull && docker compose up -d --build; fi"
-CRON_PATTERN="personal-website.*git fetch"
+CRON_JOB="* * * * * $REPO_DIR/scripts/autodeploy.sh run"
+CRON_PATTERN="autodeploy.sh run"
 
 usage() {
-    echo "Usage: $0 {on|off|status}"
+    echo "Usage: $0 {on|off|status|run}"
     exit 1
 }
 
 case "${1:-}" in
+    run)
+        cd "$REPO_DIR"
+        git fetch origin main
+        if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            git pull
+            docker compose up -d --build
+        fi
+        ;;
     on)
         ( (crontab -l 2>/dev/null || true) | (grep -v "$CRON_PATTERN" || true); echo "$CRON_JOB") | crontab -
         echo "Auto-deploy cron enabled (checks every minute)"
