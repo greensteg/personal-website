@@ -104,12 +104,24 @@ function applyContentStyling(container) {
     });
     
     // Style lists
+    container.querySelectorAll('ol').forEach(ol => {
+        ol.className = 'list-decimal pl-5 sm:pl-6 space-y-3 mb-6 sm:mb-8 text-gray-600';
+    });
+
     container.querySelectorAll('ul').forEach(ul => {
-        ul.className = 'space-y-2 mb-6';
+        ul.className = 'list-disc pl-5 sm:pl-6 space-y-2 mb-6 sm:mb-8 text-gray-600';
     });
     
     container.querySelectorAll('li').forEach(li => {
-        li.className = 'text-gray-600';
+        li.className = 'text-gray-600 leading-loose text-sm sm:text-base pl-1';
+    });
+
+    container.querySelectorAll('li p').forEach(p => {
+        p.className = 'text-gray-600 leading-loose mb-2 text-sm sm:text-base';
+    });
+
+    container.querySelectorAll('strong').forEach(strong => {
+        strong.className = 'font-semibold text-gray-800';
     });
 
     // Style blockquotes
