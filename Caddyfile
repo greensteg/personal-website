@@ -2,6 +2,38 @@ wentongzhang.com {
 	redir https://www.wentongzhang.com{uri} permanent
 }
 
+couplet.wentongzhang.com {
+	handle /api/* {
+		reverse_proxy couplet-pb:8090
+	}
+	handle /_/* {
+		reverse_proxy couplet-pb:8090
+	}
+	handle {
+		root * /srv/couplet
+		file_server
+		try_files {path} /index.html
+		encode gzip
+		@static path *.js *.css *.svg *.png *.ico
+		header @static Cache-Control "public, max-age=31536000, immutable"
+	}
+}
+
+topchef.wentongzhang.com {
+	handle /api/* {
+		uri strip_prefix /api
+		reverse_proxy host.docker.internal:3100
+	}
+	handle {
+		root * /srv/topchef
+		file_server
+		try_files {path} /index.html
+		encode gzip
+		@static path *.js *.css *.svg *.png *.jpg *.ico
+		header @static Cache-Control "public, max-age=31536000, immutable"
+	}
+}
+
 www.wentongzhang.com {
 	root * /srv
 	file_server
