@@ -7,9 +7,9 @@ display: true
 
 I played my first Pro Tour this past weekend in Las Vegas, and the experience was beyond anything I expected. I finished 19th with an 11-5 record on the weekend: 4-2 in draft, 7-3 in constructed. Along the way, I lost my win-and-in for Worlds. It is hard to complain about a finish like that, but I would be lying if I said I was not at least a little disappointed not to get there in the last match.
 
-The competition was the best I have ever faced: RC and Spotlight winners, Pro Tour winners, and the reigning World Champion. But instead of starting there, I want to go back to the very beginning of this run, where the dream honestly started with something of a meme.
+The competition was the best I have ever faced: RC and Spotlight winners, Pro Tour winners, and a past World Champion. But instead of starting there, I want to go back to the very beginning of this run, where the dream honestly started with something of a meme.
 
-## A Hope and a Dreamdew Entrancer
+## Dreamdew Entrancers
 
 Right before my fiancée, Michelle, and I left for a two-month trip to Asia, we registered for the NRG Series Team Trios event at the beginning of November with our friend David. The event was in a suburb of Chicago, so it was easy to get to, and we figured it would be a good time either way.
 
