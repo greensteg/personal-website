@@ -70,6 +70,205 @@
                 border-radius: 0.6rem;
             }
 
+
+            /* ── Deck list block ── */
+
+            .mtg-deck-root {
+                margin: 2rem 0;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.625rem;
+                background: #fff;
+                box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+                overflow: hidden;
+            }
+
+            .mtg-deck-header {
+                display: flex;
+                align-items: baseline;
+                justify-content: space-between;
+                gap: 0.75rem;
+                padding: 1rem 1.25rem;
+                border-bottom: 1px solid #e2e8f0;
+                background: #f8fafc;
+            }
+
+            .mtg-deck-header-left {
+                min-width: 0;
+            }
+
+            .mtg-deck-title {
+                margin: 0;
+                font-size: 0.9375rem;
+                font-weight: 600;
+                color: #0f172a;
+                letter-spacing: 0.01em;
+                line-height: 1.3;
+            }
+
+            .mtg-deck-meta {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 0.375rem 0.625rem;
+                margin-top: 0.25rem;
+                font-size: 0.75rem;
+                color: #64748b;
+            }
+
+            .mtg-deck-meta a {
+                color: #3b82f6;
+                text-decoration: none;
+            }
+
+            .mtg-deck-meta a:hover {
+                text-decoration: underline;
+            }
+
+            .mtg-deck-meta-sep {
+                color: #cbd5e1;
+            }
+
+            .mtg-deck-body {
+                display: flex;
+                min-height: 0;
+            }
+
+            .mtg-deck-cards {
+                flex: 1;
+                min-width: 0;
+                padding: 1rem 1.25rem;
+                overflow-y: auto;
+                max-height: 32rem;
+            }
+
+            .mtg-deck-section + .mtg-deck-section {
+                margin-top: 1.25rem;
+                padding-top: 1rem;
+                border-top: 1px solid #f1f5f9;
+            }
+
+            .mtg-deck-section-title {
+                margin: 0 0 0.5rem;
+                font-size: 0.6875rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: #94a3b8;
+            }
+
+            .mtg-deck-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .mtg-deck-card {
+                display: flex;
+                align-items: baseline;
+                gap: 0.5rem;
+                padding: 0.1875rem 0.375rem;
+                border-radius: 0.25rem;
+                font-size: 0.8125rem;
+                line-height: 1.5;
+                transition: background-color 0.1s ease;
+            }
+
+            .mtg-deck-card:hover {
+                background: #f8fafc;
+            }
+
+            .mtg-deck-card-qty {
+                flex-shrink: 0;
+                width: 1.25rem;
+                text-align: right;
+                font-variant-numeric: tabular-nums;
+                color: #94a3b8;
+                font-weight: 500;
+            }
+
+            .mtg-deck-card-name {
+                min-width: 0;
+                color: #334155;
+            }
+
+            /* ── Deck preview pane ── */
+
+            .mtg-deck-preview-pane {
+                display: none;
+                width: 13rem;
+                flex-shrink: 0;
+                border-left: 1px solid #e2e8f0;
+                background: #f8fafc;
+                padding: 1rem;
+                align-items: flex-start;
+                justify-content: center;
+            }
+
+            @media (min-width: 640px) {
+                .mtg-deck-preview-pane {
+                    display: flex;
+                }
+            }
+
+            .mtg-deck-preview-inner {
+                width: 100%;
+                aspect-ratio: 488 / 680;
+                border-radius: 0.5rem;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f1f5f9;
+                position: sticky;
+                top: 1rem;
+            }
+
+            .mtg-deck-preview-inner img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 0.5rem;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+
+            .mtg-deck-preview-inner img.mtg-deck-img-loaded {
+                opacity: 1;
+            }
+
+            .mtg-deck-preview-placeholder {
+                font-size: 0.6875rem;
+                color: #94a3b8;
+                text-align: center;
+                padding: 0.5rem;
+            }
+
+            .mtg-deck-copy-btn {
+                appearance: none;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.375rem;
+                background: #fff;
+                padding: 0.3125rem 0.625rem;
+                font-size: 0.6875rem;
+                font-weight: 500;
+                color: #64748b;
+                cursor: pointer;
+                white-space: nowrap;
+                transition: border-color 0.15s ease, color 0.15s ease;
+            }
+
+            .mtg-deck-copy-btn:hover {
+                border-color: #cbd5e1;
+                color: #334155;
+            }
+
+            .mtg-deck-footer {
+                display: flex;
+                justify-content: flex-end;
+                padding: 0.625rem 1.25rem;
+                border-top: 1px solid #f1f5f9;
+            }
         `;
 
         document.head.appendChild(style);
@@ -471,24 +670,25 @@
 
     function createDeckList(deck) {
         const wrapper = document.createElement('section');
-        wrapper.className = 'mtg-deck-root my-8 rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-5';
+        wrapper.className = 'mtg-deck-root';
 
+        // ── Header ──
         const header = document.createElement('div');
-        header.className = 'mb-4 flex flex-col gap-3 border-b border-slate-100 pb-4 sm:flex-row sm:items-start sm:justify-between';
+        header.className = 'mtg-deck-header';
 
-        const heading = document.createElement('div');
-        heading.className = 'min-w-0';
+        const headerLeft = document.createElement('div');
+        headerLeft.className = 'mtg-deck-header-left';
 
         if (deck.title) {
             const title = document.createElement('h2');
             title.textContent = deck.title;
-            title.className = 'text-lg font-medium text-slate-900';
-            heading.appendChild(title);
+            title.className = 'mtg-deck-title';
+            headerLeft.appendChild(title);
         }
 
         if (deck.format || deck.sourceUrl) {
             const meta = document.createElement('div');
-            meta.className = 'mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500';
+            meta.className = 'mtg-deck-meta';
 
             if (deck.format) {
                 const format = document.createElement('span');
@@ -496,83 +696,134 @@
                 meta.appendChild(format);
             }
 
+            if (deck.format && deck.sourceUrl) {
+                const sep = document.createElement('span');
+                sep.className = 'mtg-deck-meta-sep';
+                sep.textContent = '·';
+                meta.appendChild(sep);
+            }
+
             if (deck.sourceUrl) {
                 const source = document.createElement('a');
                 source.href = deck.sourceUrl;
                 source.target = '_blank';
                 source.rel = 'noreferrer noopener';
-                source.className = 'text-blue-600 underline hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded';
-                source.textContent = 'Source';
+                source.textContent = 'View source';
                 meta.appendChild(source);
             }
 
-            heading.appendChild(meta);
+            headerLeft.appendChild(meta);
         }
 
-        const actions = document.createElement('div');
-        actions.className = 'flex shrink-0 items-center gap-2';
-
-        const copyButton = document.createElement('button');
-        copyButton.type = 'button';
-        copyButton.className = 'rounded-md border border-slate-200 px-3 py-1.5 text-sm text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
-        copyButton.textContent = 'Copy decklist';
-        copyButton.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(deckToPlainText(deck));
-                copyButton.textContent = 'Copied';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy decklist';
-                }, 1200);
-            } catch (error) {
-                copyButton.textContent = 'Copy failed';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy decklist';
-                }, 1200);
-            }
-        });
-
-        actions.appendChild(copyButton);
-        header.appendChild(heading);
-        header.appendChild(actions);
+        header.appendChild(headerLeft);
         wrapper.appendChild(header);
 
-        const sectionsGrid = document.createElement('div');
-        sectionsGrid.className = 'space-y-5';
+        // ── Body: cards + preview ──
+        const body = document.createElement('div');
+        body.className = 'mtg-deck-body';
 
-        deck.sections.forEach(section => {
-            const sectionEl = document.createElement('section');
+        const cardsPane = document.createElement('div');
+        cardsPane.className = 'mtg-deck-cards';
+
+        // Preview pane (desktop only)
+        const previewPane = document.createElement('div');
+        previewPane.className = 'mtg-deck-preview-pane';
+
+        const previewInner = document.createElement('div');
+        previewInner.className = 'mtg-deck-preview-inner';
+
+        const previewPlaceholder = document.createElement('div');
+        previewPlaceholder.className = 'mtg-deck-preview-placeholder';
+        previewPlaceholder.textContent = 'Hover a card';
+        previewInner.appendChild(previewPlaceholder);
+        previewPane.appendChild(previewInner);
+
+        function showDeckPreview(cardName) {
+            fetchCard(cardName).then(cardData => {
+                if (!cardData || !cardData.previewImage) {
+                    return;
+                }
+
+                const existing = previewInner.querySelector('img');
+                if (existing && existing.dataset.cardName === cardName) {
+                    return;
+                }
+
+                const img = document.createElement('img');
+                img.dataset.cardName = cardName;
+                img.alt = cardName;
+                img.src = cardData.previewImage;
+                img.onload = () => img.classList.add('mtg-deck-img-loaded');
+
+                previewInner.innerHTML = '';
+                previewInner.appendChild(img);
+            });
+        }
+
+        deck.sections.forEach((section, index) => {
+            const sectionEl = document.createElement('div');
+            sectionEl.className = 'mtg-deck-section';
 
             const sectionTitle = document.createElement('h3');
-            sectionTitle.textContent = section.name;
-            sectionTitle.className = 'mb-2 text-sm font-medium uppercase tracking-wide text-slate-500';
+            sectionTitle.className = 'mtg-deck-section-title';
+            const count = section.cards.reduce((sum, c) => sum + c.qty, 0);
+            sectionTitle.textContent = `${section.name} (${count})`;
             sectionEl.appendChild(sectionTitle);
 
             const list = document.createElement('ul');
-            list.className = 'space-y-1';
+            list.className = 'mtg-deck-list';
 
             section.cards.forEach(card => {
                 const item = document.createElement('li');
-                item.className = 'flex items-baseline gap-3 text-sm sm:text-base';
+                item.className = 'mtg-deck-card';
 
                 const qty = document.createElement('span');
                 qty.textContent = String(card.qty);
-                qty.className = 'w-7 shrink-0 text-right font-medium text-slate-500';
+                qty.className = 'mtg-deck-card-qty';
 
                 const name = document.createElement('span');
-                name.className = 'min-w-0 text-slate-700';
+                name.className = 'mtg-deck-card-name';
                 name.appendChild(createCardLink(card.name, null));
                 hydrateCardReference(name.firstChild, card.name);
 
                 item.appendChild(qty);
                 item.appendChild(name);
+
+                item.addEventListener('mouseenter', () => showDeckPreview(card.name));
+
                 list.appendChild(item);
             });
 
             sectionEl.appendChild(list);
-            sectionsGrid.appendChild(sectionEl);
+            cardsPane.appendChild(sectionEl);
         });
 
-        wrapper.appendChild(sectionsGrid);
+        body.appendChild(cardsPane);
+        body.appendChild(previewPane);
+        wrapper.appendChild(body);
+
+        // ── Footer with copy button ──
+        const footer = document.createElement('div');
+        footer.className = 'mtg-deck-footer';
+
+        const copyButton = document.createElement('button');
+        copyButton.type = 'button';
+        copyButton.className = 'mtg-deck-copy-btn';
+        copyButton.textContent = 'Copy decklist';
+        copyButton.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(deckToPlainText(deck));
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => { copyButton.textContent = 'Copy decklist'; }, 1200);
+            } catch (error) {
+                copyButton.textContent = 'Failed';
+                setTimeout(() => { copyButton.textContent = 'Copy decklist'; }, 1200);
+            }
+        });
+
+        footer.appendChild(copyButton);
+        wrapper.appendChild(footer);
+
         return wrapper;
     }
 

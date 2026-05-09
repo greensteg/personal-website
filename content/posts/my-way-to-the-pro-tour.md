@@ -78,7 +78,7 @@ I had around a month to figure out what to play for RC Milwaukee (I only had one
 At this point, I was really confused and honestly didn't even have too many options in terms of acquiring the cards before the RC. I trawled through decklists on MTGTop8 and MTGGoldfish, doing anything I can to find inspiration on something that I can play. After some vigorous digging, I stumbled across the Boros Dragons won the South American RC in Santiago a week or two ago.
 
 ```deck
-Title: Boros Dragons
+Title: Boros Dragons (RC Santiago Winner)
 Format: Standard
 Source: https://www.mtggoldfish.com/deck/7632881#paper
 
