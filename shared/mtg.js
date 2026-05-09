@@ -18,13 +18,16 @@
                 color: #1d4ed8;
                 text-decoration: underline;
                 text-decoration-style: dotted;
-                text-underline-offset: 0.18em;
+                text-decoration-thickness: 1.5px;
+                text-underline-offset: 0.2em;
                 cursor: pointer;
+                transition: color 0.15s ease, text-decoration-color 0.15s ease;
             }
 
             .mtg-card-link:hover,
             .mtg-card-link:focus-visible {
                 color: #1e40af;
+                text-decoration-style: solid;
             }
 
             .mtg-card-link:focus-visible {
@@ -36,13 +39,24 @@
             .mtg-card-preview {
                 position: fixed;
                 z-index: 80;
-                width: min(260px, calc(100vw - 2rem));
-                border-radius: 0.5rem;
+                width: min(280px, calc(100vw - 2rem));
+                border-radius: 0.75rem;
                 background: rgba(255, 255, 255, 0.98);
-                border: 1px solid rgba(148, 163, 184, 0.45);
-                box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+                border: 1px solid rgba(148, 163, 184, 0.3);
+                box-shadow:
+                    0 4px 6px -1px rgba(15, 23, 42, 0.06),
+                    0 20px 40px -4px rgba(15, 23, 42, 0.16);
                 padding: 0.5rem;
-                backdrop-filter: blur(6px);
+                backdrop-filter: blur(8px);
+                opacity: 0;
+                transform: scale(0.96) translateY(4px);
+                transition: opacity 0.18s ease, transform 0.18s ease;
+                pointer-events: auto;
+            }
+
+            .mtg-card-preview.mtg-card-preview--visible {
+                opacity: 1;
+                transform: scale(1) translateY(0);
             }
 
             .mtg-card-preview[hidden] {
@@ -53,16 +67,9 @@
                 display: block;
                 width: 100%;
                 height: auto;
-                border-radius: 0.4rem;
+                border-radius: 0.6rem;
             }
 
-            .mtg-card-preview-title {
-                display: block;
-                margin-top: 0.5rem;
-                font-size: 0.875rem;
-                color: #0f172a;
-                text-decoration: none;
-            }
         `;
 
         document.head.appendChild(style);
@@ -212,7 +219,12 @@
     function hidePreview() {
         cancelPreviewHide();
         if (previewRoot) {
-            previewRoot.hidden = true;
+            previewRoot.classList.remove('mtg-card-preview--visible');
+            setTimeout(() => {
+                if (!previewRoot.classList.contains('mtg-card-preview--visible')) {
+                    previewRoot.hidden = true;
+                }
+            }, 180);
         }
         previewAnchor = null;
     }
@@ -224,11 +236,7 @@
             ? `<a href="${href}" target="_blank" rel="noreferrer noopener"><img src="${escapeHtml(card.previewImage)}" alt="${title}"></a>`
             : `<div class="text-sm text-slate-600">Preview unavailable.</div>`;
 
-        const footer = card.scryfall_uri
-            ? `<a class="mtg-card-preview-title" href="${href}" target="_blank" rel="noreferrer noopener">${title}</a>`
-            : `<span class="mtg-card-preview-title">${title}</span>`;
-
-        return `${image}${footer}`;
+        return image;
     }
 
     function positionPreview(anchor) {
@@ -265,8 +273,14 @@
         cancelPreviewHide();
         previewAnchor = anchor;
         root.innerHTML = renderPreviewBody(card);
+        root.classList.remove('mtg-card-preview--visible');
         root.hidden = false;
         positionPreview(anchor);
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                root.classList.add('mtg-card-preview--visible');
+            });
+        });
     }
 
     function isCoarsePointer() {
