@@ -164,7 +164,7 @@
 
             .mtg-deck-card {
                 display: flex;
-                align-items: baseline;
+                align-items: center;
                 gap: 0.5rem;
                 padding: 0.1875rem 0.375rem;
                 border-radius: 0.25rem;
@@ -187,9 +187,41 @@
             }
 
             .mtg-deck-card-name {
+                flex: 1;
                 min-width: 0;
                 color: #334155;
             }
+
+            .mtg-deck-card-mana {
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                gap: 1px;
+                margin-left: auto;
+            }
+
+            .mtg-mana-sym {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 1rem;
+                height: 1rem;
+                border-radius: 50%;
+                font-size: 0.5625rem;
+                font-weight: 700;
+                line-height: 1;
+                text-align: center;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            }
+
+            .mtg-mana-W { background: #f9f5e3; color: #6b5c1f; }
+            .mtg-mana-U { background: #0e68ab; color: #fff; }
+            .mtg-mana-B { background: #39303b; color: #ccc; }
+            .mtg-mana-R { background: #d3321a; color: #fff; }
+            .mtg-mana-G { background: #1a7a3e; color: #fff; }
+            .mtg-mana-C { background: #beb9b2; color: #444; }
+            .mtg-mana-generic { background: #e2ddd5; color: #555; }
+            .mtg-mana-X { background: #e2ddd5; color: #555; }
 
             /* ── Deck preview pane ── */
 
@@ -301,6 +333,12 @@
                 return null;
             }
 
+            // Invalidate entries missing fields added in later versions
+            if (!('type_line' in parsed.data) || !('mana_cost' in parsed.data)) {
+                localStorage.removeItem(storageKey(cardName));
+                return null;
+            }
+
             return parsed.data;
         } catch (error) {
             return null;
@@ -344,7 +382,8 @@
             scryfall_uri: card.scryfall_uri || null,
             previewImage: getPreviewImage(card),
             layout: card.layout || null,
-            type_line: card.type_line || ''
+            type_line: card.type_line || '',
+            mana_cost: card.mana_cost || ''
         };
     }
 
@@ -661,6 +700,46 @@
         return lines.join('\n');
     }
 
+    function renderManaCost(manaCostStr) {
+        if (!manaCostStr) {
+            return null;
+        }
+
+        const symbols = manaCostStr.match(/\{([^}]+)\}/g);
+        if (!symbols || symbols.length === 0) {
+            return null;
+        }
+
+        const container = document.createElement('span');
+        container.className = 'mtg-deck-card-mana';
+
+        symbols.forEach(sym => {
+            const inner = sym.slice(1, -1); // strip { }
+            const el = document.createElement('span');
+            el.className = 'mtg-mana-sym';
+            el.textContent = inner;
+
+            // Color class
+            if (/^\d+$/.test(inner)) {
+                el.classList.add('mtg-mana-generic');
+            } else if (inner === 'X') {
+                el.classList.add('mtg-mana-X');
+            } else if (inner === 'C') {
+                el.classList.add('mtg-mana-C');
+            } else if (/^[WUBRG]$/.test(inner)) {
+                el.classList.add('mtg-mana-' + inner);
+            } else {
+                // Hybrid or other — use generic styling
+                el.classList.add('mtg-mana-generic');
+                el.style.fontSize = '0.45rem';
+            }
+
+            container.appendChild(el);
+        });
+
+        return container;
+    }
+
     const typeOrder = [
         'Creature', 'Planeswalker', 'Instant', 'Sorcery',
         'Enchantment', 'Artifact', 'Land'
@@ -831,7 +910,7 @@
             });
         }
 
-        function renderCardList(cards, container) {
+        function renderCardList(cards, container, cardDataMap) {
             const list = document.createElement('ul');
             list.className = 'mtg-deck-list';
 
@@ -851,6 +930,17 @@
                 item.appendChild(qty);
                 item.appendChild(name);
 
+                // Mana cost
+                if (cardDataMap) {
+                    const data = cardDataMap.get(normalizeCardName(card.name).toLowerCase());
+                    if (data && data.mana_cost) {
+                        const mana = renderManaCost(data.mana_cost);
+                        if (mana) {
+                            item.appendChild(mana);
+                        }
+                    }
+                }
+
                 item.addEventListener('mouseenter', () => showDeckPreview(card.name));
 
                 list.appendChild(item);
@@ -867,23 +957,25 @@
         const mainSection = deck.sections.find(s => s.name === 'Main Deck');
         const sideSection = deck.sections.find(s => s.name !== 'Main Deck');
 
-        if (mainSection) {
-            // Fetch all card data in parallel, then group by type
-            const cardNames = mainSection.cards.map(c => normalizeCardName(c.name));
-            Promise.all(cardNames.map(n => fetchCard(n))).then(results => {
-                const dataMap = new Map();
-                results.forEach((data, i) => {
-                    if (data) {
-                        dataMap.set(cardNames[i].toLowerCase(), data);
-                    }
-                });
+        // Fetch ALL card data (main + side) in parallel
+        const allCardNames = allCards.map(c => normalizeCardName(c.name));
+        const fetchPromise = Promise.all(allCardNames.map(n => fetchCard(n))).then(results => {
+            const dataMap = new Map();
+            results.forEach((data, i) => {
+                if (data) {
+                    dataMap.set(allCardNames[i].toLowerCase(), data);
+                }
+            });
+            return dataMap;
+        });
 
+        if (mainSection) {
+            fetchPromise.then(dataMap => {
                 const grouped = groupCardsByType(mainSection.cards, dataMap);
 
-                // Clear the cards pane and re-render grouped
                 const mainContent = document.createElement('div');
 
-                grouped.forEach((group, i) => {
+                grouped.forEach(group => {
                     const sectionEl = document.createElement('div');
                     sectionEl.className = 'mtg-deck-section';
 
@@ -893,11 +985,24 @@
                     sectionTitle.textContent = `${group.name} (${count})`;
                     sectionEl.appendChild(sectionTitle);
 
-                    renderCardList(group.cards, sectionEl);
+                    renderCardList(group.cards, sectionEl, dataMap);
                     mainContent.appendChild(sectionEl);
                 });
 
-                // Replace the temporary main section
+                // Sideboard (appended after mainboard groups)
+                if (sideSection) {
+                    const sideEl = document.createElement('div');
+                    sideEl.className = 'mtg-deck-section';
+                    const sideTitle = document.createElement('h3');
+                    sideTitle.className = 'mtg-deck-section-title';
+                    const sideCount = sideSection.cards.reduce((sum, c) => sum + c.qty, 0);
+                    sideTitle.textContent = `${sideSection.name} (${sideCount})`;
+                    sideEl.appendChild(sideTitle);
+                    renderCardList(sideSection.cards, sideEl, dataMap);
+                    mainContent.appendChild(sideEl);
+                }
+
+                // Replace the temporary content
                 const tempMain = cardsPane.querySelector('[data-section="main"]');
                 if (tempMain) {
                     tempMain.replaceWith(mainContent);
@@ -918,19 +1023,19 @@
             renderCardList(mainSection.cards, tempSection);
             tempMain.appendChild(tempSection);
 
-            cardsPane.appendChild(tempMain);
-        }
+            if (sideSection) {
+                const sideEl = document.createElement('div');
+                sideEl.className = 'mtg-deck-section';
+                const sideTitle = document.createElement('h3');
+                sideTitle.className = 'mtg-deck-section-title';
+                const sideCount = sideSection.cards.reduce((sum, c) => sum + c.qty, 0);
+                sideTitle.textContent = `${sideSection.name} (${sideCount})`;
+                sideEl.appendChild(sideTitle);
+                renderCardList(sideSection.cards, sideEl);
+                tempMain.appendChild(sideEl);
+            }
 
-        if (sideSection) {
-            const sideEl = document.createElement('div');
-            sideEl.className = 'mtg-deck-section';
-            const sideTitle = document.createElement('h3');
-            sideTitle.className = 'mtg-deck-section-title';
-            const sideCount = sideSection.cards.reduce((sum, c) => sum + c.qty, 0);
-            sideTitle.textContent = `${sideSection.name} (${sideCount})`;
-            sideEl.appendChild(sideTitle);
-            renderCardList(sideSection.cards, sideEl);
-            cardsPane.appendChild(sideEl);
+            cardsPane.appendChild(tempMain);
         }
 
         body.appendChild(cardsPane);
