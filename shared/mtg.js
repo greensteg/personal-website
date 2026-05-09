@@ -215,15 +215,14 @@
                 aspect-ratio: 488 / 680;
                 border-radius: 0.5rem;
                 overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #f1f5f9;
                 position: sticky;
                 top: 1rem;
+                background: #f1f5f9;
             }
 
             .mtg-deck-preview-inner img {
+                position: absolute;
+                inset: 0;
                 display: block;
                 width: 100%;
                 height: 100%;
@@ -233,15 +232,8 @@
                 transition: opacity 0.2s ease;
             }
 
-            .mtg-deck-preview-inner img.mtg-deck-img-loaded {
+            .mtg-deck-preview-inner img.mtg-deck-img-active {
                 opacity: 1;
-            }
-
-            .mtg-deck-preview-placeholder {
-                font-size: 0.6875rem;
-                color: #94a3b8;
-                text-align: center;
-                padding: 0.5rem;
             }
 
             .mtg-deck-copy-btn {
@@ -351,7 +343,8 @@
             name: card.name,
             scryfall_uri: card.scryfall_uri || null,
             previewImage: getPreviewImage(card),
-            layout: card.layout || null
+            layout: card.layout || null,
+            type_line: card.type_line || ''
         };
     }
 
@@ -668,6 +661,61 @@
         return lines.join('\n');
     }
 
+    const typeOrder = [
+        'Creature', 'Planeswalker', 'Instant', 'Sorcery',
+        'Enchantment', 'Artifact', 'Land'
+    ];
+
+    function classifyCardType(typeLine) {
+        if (!typeLine) {
+            return 'Other';
+        }
+
+        // Check supertypes/types in priority order
+        // Lands that are also creatures (e.g. Restless Vinestalk) → Land
+        if (/\bLand\b/i.test(typeLine)) {
+            return 'Land';
+        }
+
+        for (const t of typeOrder) {
+            if (new RegExp('\\b' + t + '\\b', 'i').test(typeLine)) {
+                return t;
+            }
+        }
+
+        return 'Other';
+    }
+
+    function groupCardsByType(cards, cardDataMap) {
+        const buckets = new Map();
+
+        cards.forEach(card => {
+            const data = cardDataMap.get(normalizeCardName(card.name).toLowerCase());
+            const bucket = data ? classifyCardType(data.type_line) : 'Other';
+            if (!buckets.has(bucket)) {
+                buckets.set(bucket, []);
+            }
+
+            buckets.get(bucket).push(card);
+        });
+
+        // Sort buckets by typeOrder, unknowns at end
+        const sorted = [];
+        for (const t of typeOrder) {
+            if (buckets.has(t)) {
+                sorted.push({ name: t, cards: buckets.get(t) });
+                buckets.delete(t);
+            }
+        }
+
+        // Remaining (Other)
+        buckets.forEach((cards, name) => {
+            sorted.push({ name, cards });
+        });
+
+        return sorted;
+    }
+
     function createDeckList(deck) {
         const wrapper = document.createElement('section');
         wrapper.className = 'mtg-deck-root';
@@ -725,55 +773,69 @@
         const cardsPane = document.createElement('div');
         cardsPane.className = 'mtg-deck-cards';
 
-        // Preview pane (desktop only)
+        // Preview pane (desktop only) — crossfade between two images
         const previewPane = document.createElement('div');
         previewPane.className = 'mtg-deck-preview-pane';
 
         const previewInner = document.createElement('div');
         previewInner.className = 'mtg-deck-preview-inner';
-
-        const previewPlaceholder = document.createElement('div');
-        previewPlaceholder.className = 'mtg-deck-preview-placeholder';
-        previewPlaceholder.textContent = 'Hover a card';
-        previewInner.appendChild(previewPlaceholder);
+        previewInner.style.position = 'relative';
         previewPane.appendChild(previewInner);
 
+        // Image cache: keep loaded <img> elements to avoid re-fetching
+        const imgCache = new Map();
+        let activeCardName = null;
+
         function showDeckPreview(cardName) {
+            if (cardName === activeCardName) {
+                return;
+            }
+
+            activeCardName = cardName;
+
+            // If image is already cached, just crossfade
+            if (imgCache.has(cardName)) {
+                crossfadeTo(cardName);
+                return;
+            }
+
+            // Fetch card data, create img, cache it
             fetchCard(cardName).then(cardData => {
                 if (!cardData || !cardData.previewImage) {
                     return;
                 }
 
-                const existing = previewInner.querySelector('img');
-                if (existing && existing.dataset.cardName === cardName) {
-                    return;
-                }
-
+                // Could have changed while loading
                 const img = document.createElement('img');
                 img.dataset.cardName = cardName;
                 img.alt = cardName;
                 img.src = cardData.previewImage;
-                img.onload = () => img.classList.add('mtg-deck-img-loaded');
-
-                previewInner.innerHTML = '';
-                previewInner.appendChild(img);
+                img.onload = () => {
+                    imgCache.set(cardName, img);
+                    previewInner.appendChild(img);
+                    // Only crossfade if this card is still the target
+                    if (activeCardName === cardName) {
+                        crossfadeTo(cardName);
+                    }
+                };
             });
         }
 
-        deck.sections.forEach((section, index) => {
-            const sectionEl = document.createElement('div');
-            sectionEl.className = 'mtg-deck-section';
+        function crossfadeTo(cardName) {
+            previewInner.querySelectorAll('img').forEach(img => {
+                if (img.dataset.cardName === cardName) {
+                    img.classList.add('mtg-deck-img-active');
+                } else {
+                    img.classList.remove('mtg-deck-img-active');
+                }
+            });
+        }
 
-            const sectionTitle = document.createElement('h3');
-            sectionTitle.className = 'mtg-deck-section-title';
-            const count = section.cards.reduce((sum, c) => sum + c.qty, 0);
-            sectionTitle.textContent = `${section.name} (${count})`;
-            sectionEl.appendChild(sectionTitle);
-
+        function renderCardList(cards, container) {
             const list = document.createElement('ul');
             list.className = 'mtg-deck-list';
 
-            section.cards.forEach(card => {
+            cards.forEach(card => {
                 const item = document.createElement('li');
                 item.className = 'mtg-deck-card';
 
@@ -794,9 +856,82 @@
                 list.appendChild(item);
             });
 
-            sectionEl.appendChild(list);
-            cardsPane.appendChild(sectionEl);
-        });
+            container.appendChild(list);
+        }
+
+        // Collect all card names for fetching
+        const allCards = deck.sections.flatMap(s => s.cards);
+        const firstCardName = allCards.length > 0 ? allCards[0].name : null;
+
+        // Fetch all mainboard cards, then re-render grouped by type
+        const mainSection = deck.sections.find(s => s.name === 'Main Deck');
+        const sideSection = deck.sections.find(s => s.name !== 'Main Deck');
+
+        if (mainSection) {
+            // Fetch all card data in parallel, then group by type
+            const cardNames = mainSection.cards.map(c => normalizeCardName(c.name));
+            Promise.all(cardNames.map(n => fetchCard(n))).then(results => {
+                const dataMap = new Map();
+                results.forEach((data, i) => {
+                    if (data) {
+                        dataMap.set(cardNames[i].toLowerCase(), data);
+                    }
+                });
+
+                const grouped = groupCardsByType(mainSection.cards, dataMap);
+
+                // Clear the cards pane and re-render grouped
+                const mainContent = document.createElement('div');
+
+                grouped.forEach((group, i) => {
+                    const sectionEl = document.createElement('div');
+                    sectionEl.className = 'mtg-deck-section';
+
+                    const sectionTitle = document.createElement('h3');
+                    sectionTitle.className = 'mtg-deck-section-title';
+                    const count = group.cards.reduce((sum, c) => sum + c.qty, 0);
+                    sectionTitle.textContent = `${group.name} (${count})`;
+                    sectionEl.appendChild(sectionTitle);
+
+                    renderCardList(group.cards, sectionEl);
+                    mainContent.appendChild(sectionEl);
+                });
+
+                // Replace the temporary main section
+                const tempMain = cardsPane.querySelector('[data-section="main"]');
+                if (tempMain) {
+                    tempMain.replaceWith(mainContent);
+                }
+            });
+
+            // Render a temporary flat list while loading
+            const tempMain = document.createElement('div');
+            tempMain.dataset.section = 'main';
+
+            const tempSection = document.createElement('div');
+            tempSection.className = 'mtg-deck-section';
+            const tempTitle = document.createElement('h3');
+            tempTitle.className = 'mtg-deck-section-title';
+            const mainCount = mainSection.cards.reduce((sum, c) => sum + c.qty, 0);
+            tempTitle.textContent = `Main Deck (${mainCount})`;
+            tempSection.appendChild(tempTitle);
+            renderCardList(mainSection.cards, tempSection);
+            tempMain.appendChild(tempSection);
+
+            cardsPane.appendChild(tempMain);
+        }
+
+        if (sideSection) {
+            const sideEl = document.createElement('div');
+            sideEl.className = 'mtg-deck-section';
+            const sideTitle = document.createElement('h3');
+            sideTitle.className = 'mtg-deck-section-title';
+            const sideCount = sideSection.cards.reduce((sum, c) => sum + c.qty, 0);
+            sideTitle.textContent = `${sideSection.name} (${sideCount})`;
+            sideEl.appendChild(sideTitle);
+            renderCardList(sideSection.cards, sideEl);
+            cardsPane.appendChild(sideEl);
+        }
 
         body.appendChild(cardsPane);
         body.appendChild(previewPane);
@@ -823,6 +958,11 @@
 
         footer.appendChild(copyButton);
         wrapper.appendChild(footer);
+
+        // Show the first card in the preview by default
+        if (firstCardName) {
+            showDeckPreview(firstCardName);
+        }
 
         return wrapper;
     }
