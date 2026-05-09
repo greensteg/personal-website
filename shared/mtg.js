@@ -136,9 +136,9 @@
             .mtg-deck-cards {
                 flex: 1;
                 min-width: 0;
-                padding: 1rem 1.25rem;
+                padding: 1rem 1rem;
                 overflow-y: auto;
-                max-height: 32rem;
+                max-height: 44rem;
             }
 
             .mtg-deck-section + .mtg-deck-section {
@@ -201,33 +201,16 @@
             }
 
             .mtg-mana-sym {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 1rem;
-                height: 1rem;
-                border-radius: 50%;
-                font-size: 0.5625rem;
-                font-weight: 700;
-                line-height: 1;
-                text-align: center;
-                box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+                display: inline-block;
+                width: 0.875rem;
+                height: 0.875rem;
             }
-
-            .mtg-mana-W { background: #f9f5e3; color: #6b5c1f; }
-            .mtg-mana-U { background: #0e68ab; color: #fff; }
-            .mtg-mana-B { background: #39303b; color: #ccc; }
-            .mtg-mana-R { background: #d3321a; color: #fff; }
-            .mtg-mana-G { background: #1a7a3e; color: #fff; }
-            .mtg-mana-C { background: #beb9b2; color: #444; }
-            .mtg-mana-generic { background: #e2ddd5; color: #555; }
-            .mtg-mana-X { background: #e2ddd5; color: #555; }
 
             /* ── Deck preview pane ── */
 
             .mtg-deck-preview-pane {
                 display: none;
-                width: 13rem;
+                width: 15rem;
                 flex-shrink: 0;
                 border-left: 1px solid #e2e8f0;
                 background: #f8fafc;
@@ -518,8 +501,10 @@
         return global.matchMedia && global.matchMedia('(pointer: coarse)').matches;
     }
 
-    function createCardLink(cardName, cardData) {
+    function createCardLink(cardName, cardData, options) {
         const name = normalizeCardName(cardName);
+        const skipPreview = options && options.skipPreview;
+
         if (!cardData) {
             const fallback = document.createElement('span');
             fallback.textContent = name;
@@ -534,20 +519,22 @@
         link.target = '_blank';
         link.rel = 'noreferrer noopener';
 
-        link.addEventListener('mouseenter', () => showPreview(link, cardData));
-        link.addEventListener('mouseleave', schedulePreviewHide);
-        link.addEventListener('focus', () => showPreview(link, cardData));
-        link.addEventListener('blur', schedulePreviewHide);
-        link.addEventListener('click', event => {
-            if (!isCoarsePointer()) {
-                return;
-            }
+        if (!skipPreview) {
+            link.addEventListener('mouseenter', () => showPreview(link, cardData));
+            link.addEventListener('mouseleave', schedulePreviewHide);
+            link.addEventListener('focus', () => showPreview(link, cardData));
+            link.addEventListener('blur', schedulePreviewHide);
+            link.addEventListener('click', event => {
+                if (!isCoarsePointer()) {
+                    return;
+                }
 
-            if (previewAnchor !== link || !previewRoot || previewRoot.hidden) {
-                event.preventDefault();
-                showPreview(link, cardData);
-            }
-        });
+                if (previewAnchor !== link || !previewRoot || previewRoot.hidden) {
+                    event.preventDefault();
+                    showPreview(link, cardData);
+                }
+            });
+        }
 
         return link;
     }
@@ -662,10 +649,13 @@
 
     function parseDeckBlock(deckText) {
         const { metadata, rawDeck } = parseDeckMetadata(deckText);
+        // Case-insensitive metadata lookup
+        const meta = {};
+        Object.keys(metadata).forEach(k => { meta[k.toLowerCase()] = metadata[k]; });
         return {
-            title: metadata.title || '',
-            format: metadata.format || '',
-            sourceUrl: metadata.sourceUrl || metadata.source || metadata.url || '',
+            title: meta.title || '',
+            format: meta.format || '',
+            sourceUrl: meta.sourceurl || meta.source || meta.url || '',
             sections: parseDeckCards(rawDeck)
         };
     }
@@ -715,26 +705,13 @@
 
         symbols.forEach(sym => {
             const inner = sym.slice(1, -1); // strip { }
-            const el = document.createElement('span');
-            el.className = 'mtg-mana-sym';
-            el.textContent = inner;
-
-            // Color class
-            if (/^\d+$/.test(inner)) {
-                el.classList.add('mtg-mana-generic');
-            } else if (inner === 'X') {
-                el.classList.add('mtg-mana-X');
-            } else if (inner === 'C') {
-                el.classList.add('mtg-mana-C');
-            } else if (/^[WUBRG]$/.test(inner)) {
-                el.classList.add('mtg-mana-' + inner);
-            } else {
-                // Hybrid or other — use generic styling
-                el.classList.add('mtg-mana-generic');
-                el.style.fontSize = '0.45rem';
-            }
-
-            container.appendChild(el);
+            const img = document.createElement('img');
+            img.className = 'mtg-mana-sym';
+            img.alt = sym;
+            // Scryfall SVG symbology: {3} → 3.svg, {U} → U.svg, {W/U} → WU.svg
+            const svgName = inner.replace(/\//g, '');
+            img.src = `https://svgs.scryfall.io/card-symbols/${encodeURIComponent(svgName)}.svg`;
+            container.appendChild(img);
         });
 
         return container;
@@ -924,8 +901,8 @@
 
                 const name = document.createElement('span');
                 name.className = 'mtg-deck-card-name';
-                name.appendChild(createCardLink(card.name, null));
-                hydrateCardReference(name.firstChild, card.name);
+                name.appendChild(createCardLink(card.name, null, { skipPreview: true }));
+                hydrateCardReference(name.firstChild, card.name, { skipPreview: true });
 
                 item.appendChild(qty);
                 item.appendChild(name);
@@ -1101,7 +1078,7 @@
         };
     }
 
-    async function hydrateCardReference(node, fallbackName) {
+    async function hydrateCardReference(node, fallbackName, options) {
         const cardName = fallbackName || (node && node.dataset ? node.dataset.cardName : '');
         if (!node || !cardName) {
             return;
@@ -1109,7 +1086,7 @@
 
         const parent = node.parentNode;
         const card = await fetchCard(cardName);
-        const replacement = createCardLink(cardName, card);
+        const replacement = createCardLink(cardName, card, options);
         if (parent) {
             parent.replaceChild(replacement, node);
         }
