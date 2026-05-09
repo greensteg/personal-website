@@ -13,7 +13,47 @@ Right before my fiancée (Michelle) and I embarked on a two-month trip to Asia, 
 
 I think the first thing that you should know about me as a Magic player is that I'm not afraid to register cards/decks that others would find "suboptimal". Some of my earliest competitive experiences, when WotC was taking baby steps towards the Magic: Spotlight Series post-COVID, were with a Grixis Midrange midrange-combo homebrew with [[Hidestugu and Kairi]] and [[Push // Pull]] in Standard around *March of the Machine* (proudly featured in [this Frank Karsten article|https://magic.gg/news/metagame-mentor-murders-at-karlov-manor-standard-at-magiccon-chicago]). During the ensuing Pioneer RCQ season, I spent an endless amount of time daydreaming/testing of an Azorius build of [[Nine Lives]] donation in a meta dominated by Amalia Combo, Izzet Phoenix, and Rakdos Vampires; I could fill another entire essay with the amount of stuff I have to say about this deck, and still regret to this day not being able to bring this creation to an RC. That day, the deck I brought was certainly my own creation. In a Standard format where you were allowed to play cards like [[Vivi Ornitier]], [[Proft's Eidetic Memory]], and [[Ouroboroid]], I decided to register this pile of cards:
 
-https://moxfield.com/decks/7EJTECgDk0mitOhjQ8c5Aw
+```deck
+Title: Simic Blink
+Format: Standard
+Source: https://moxfield.com/decks/7EJTECgDk0mitOhjQ8c5Aw
+
+4 Botanical Sanctum
+4 Breeding Pool
+2 Doppelgang
+3 Dreamdew Entrancer
+1 Forest
+3 Hedge Maze
+4 Hide on the Ceiling
+2 Into the Flood Maw
+3 Island
+4 Llanowar Elves
+2 Mistrise Village
+4 Multiversal Passage
+3 Quantum Riddler
+1 Restless Vinestalk
+3 Spider-Sense
+4 Splash Portal
+3 Three Steps Ahead
+4 Thundertrap Trainer
+2 Tishana's Tidebinder
+4 Willowrush Verge
+
+Sideboard
+1 Aegis Turtle
+1 Annul
+1 Essence Scatter
+1 Ghost Vacuum
+2 Heritage Reclamation
+1 Into the Flood Maw
+1 Negate
+1 Pick Your Poison
+1 Soul-Guide Lantern
+1 Tishana's Tidebinder
+1 Ugin, Eye of the Storms
+2 Unable to Scream
+1 Vivien Reid
+```
 
 The deck heavily supports a blink theme by playing 4 [[Splash Portal]] and 4 [[Hide on the Ceiling]]. Both are hits off of [[Thundertrap Trainer]] and generate even more value when blinking [[Thundertrap Trainer]] and/or [[Dreamdew Entrancer]] (build-your-own Ancestral Recall), and can also give you some explosive starts scamming [[Quantum Riddler]]: with a dual land T1 into [[Llanowar Elves]], you can have a [[Quantum Riddler]] in play T2 with a blue land and [[Splash Portal]]. The scam also works with [[Spider-Sense]], though you don't get your second draw and have to bounce your [[Llanowar Elves]] if you decide to go for that line. [[Spider-Sense]] works in the deck not only as solid interaction, but also a synergy piece: bouncing a [[Thundertrap Trainer]] or [[Dreamdew Entrancer]] for another ETB trigger later feels amazing.
 
@@ -37,6 +77,38 @@ I had around a month to figure out what to play for RC Milwaukee (I only had one
 
 At this point, I was really confused and honestly didn't even have too many options in terms of acquiring the cards before the RC. I trawled through decklists on MTGTop8 and MTGGoldfish, doing anything I can to find inspiration on something that I can play. After some vigorous digging, I stumbled across the Boros Dragons won the South American RC in Santiago a week or two ago.
 
-https://www.mtggoldfish.com/deck/7632881#paper
+```deck
+Title: Boros Dragons
+Format: Standard
+Source: https://www.mtggoldfish.com/deck/7632881#paper
+
+4 Burst Lightning
+2 Cavern of Souls
+4 Clarion Conqueror
+3 Dragonhawk, Fate's Tempest
+2 Get Lost
+4 Inspiring Vantage
+4 Maelstrom of the Spirit Dragon
+4 Magmatic Hellkite
+4 Momo, Friendly Flier
+2 Mountain
+4 Multiversal Passage
+4 Nova Hellkite
+4 Sacred Foundry
+4 Sarkhan, Dragon Ascendant
+1 Spectacular Tactics
+4 Sunbillow Verge
+2 Twinmaw Stormbrood
+4 Voice of Victory
+
+Sideboard
+3 Doorkeeper Thrull
+1 Get Lost
+2 Pyroclasm
+3 Requisition Raid
+3 Rest in Peace
+1 Spectacular Tactics
+2 The Legend of Roku
+```
 
 I loaded up this list and played a couple of matches on MTGA. I don't remember how the matches went, but I liked how clean many of the lines felt. T1 Momo into T2 Clarion Conqueror/Nova Hellkite, Sarkhan making a treasure to power out a Magmatic Hellkite on T3; there were many examples where the curveout felt extremely smooth. I had no delusions that this was the best deck in the format, but it did feel extremely powerful on the nut draws and pretty decent post-board as well, with access to a reasonable amount of hate pieces in white as well as lots of card advantage in [[The Legend of Roku]] for grindy games. Quite honestly, I also really liked the fact that the deck encourages you to play spells Main Phase 1 of your turn: [[Momo, Friendly Flier]] and [[Sarkhan, Dragon Ascendant]] both get pumped when your dragons enter, so you're almost always playing out creatures in your first main phase before combat even if they don't have haste. This made sequencing even more straightforward in many spots, which gave me less latitude to punt.
