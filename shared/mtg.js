@@ -577,6 +577,10 @@
             return `@@MTG_PROTECTED_${protectedSegments.length - 1}@@`;
         });
 
+        processed = processed.replace(/\[([^\[\]\|]+?)\|(https?:\/\/[^\]\s]+)\]/g, (_, label, url) => {
+            return `[${label}](${url})`;
+        });
+
         processed = processed.replace(/\[\[([^[\]]+?)\]\]/g, (_, cardName) => buildCardPlaceholder(cardName));
 
         processed = processed.replace(/@@MTG_PROTECTED_(\d+)@@/g, (_, index) => protectedSegments[parseInt(index, 10)]);
