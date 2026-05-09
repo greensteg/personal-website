@@ -28,6 +28,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="shared/utils.js"></script>
+    <script src="shared/mtg.js"></script>
     <script src="shared/nav.js"></script>
     <script>
         // Initialize navigation
@@ -167,7 +168,9 @@
             document.title = `${post.title} - Wentong Zhang`;
             
             // Render the post
-            const postHtml = marked.parse(post.content);
+            const renderedPost = window.MtgContent
+                ? window.MtgContent.renderMarkdown(post.content)
+                : { html: marked.parse(post.content), decks: [] };
             
             const singlePostContent = document.getElementById('singlePostContent');
             singlePostContent.innerHTML = `
@@ -176,13 +179,17 @@
                         <time class="text-sm text-gray-500">${post.date}</time>
                     </div>
                     <h1 class="text-2xl sm:text-3xl font-light text-gray-900 mb-6 sm:mb-8 tracking-wide">${post.title}</h1>
-                    <div class="prose prose-lg max-w-none">${postHtml}</div>
+                    <div class="prose prose-lg max-w-none">${renderedPost.html}</div>
                 </article>
             `;
             
             // Apply styling to the rendered content
             const contentDiv = singlePostContent.querySelector('.prose');
+            contentDiv.__mtgDecks = renderedPost.decks;
             applyPostStyling(contentDiv);
+            if (window.MtgContent) {
+                window.MtgContent.enhanceMtgContent(contentDiv);
+            }
         }
 
         // Initialize the page
