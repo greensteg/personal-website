@@ -243,7 +243,7 @@ My first draft of the Pro Tour felt amazing. I took [[Bitter Triumph]] Pack 1 Pi
 
 Drafting the open lane paid off almost immediately. I opened an [[Environmental Scientist]] in Pack 2, then immediately got passed an [[Emeritus of Abundance]] Pack 2 Pick 2, along with another Paradox Surveyor and some other solid Quandrix cards. I also grabbed a [[Wander Off]] in Pack 2, still hopeful that I could patch Quandrix’s biggest issue — the lack of good removal — with a black splash.
 
-Everything came together in Pack 3, where I got passed a [[Berta, Wise Extrapolator]] as well as two late [[Titan's Graves]] that made my black splash extremely consistent. I ended the draft feeling optimistic. I felt rewarded for finding the open lane and drafting toward my outs for the black splash.
+Everything came together in Pack 3, where I got passed a [[Berta, Wise Extrapolator]] as well as two late [[Titan's Grave]]s that made my black splash extremely consistent. I ended the draft feeling optimistic. I felt rewarded for finding the open lane and drafting toward my outs for the black splash.
 
 My first two rounds of the draft were relatively unremarkable. I won 2-1 against a cool [[Wisdom of Ages]] Izzet pile with pure curveout, then ran over a Boros deck 2-0 due to color screw.
 
