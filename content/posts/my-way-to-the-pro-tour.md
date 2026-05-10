@@ -1,5 +1,5 @@
 ---
-title: "A Hope, A Dreamdew, and a Pro Tour"
+title: "A Hope, a Dreamdew, and a Pro Tour"
 date: "May 8, 2026"
 id: 3
 display: true
