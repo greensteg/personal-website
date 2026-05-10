@@ -275,7 +275,7 @@ Then I punted my face off in Game 3.
 
 I found a pretty crisp line with [[Harsh Annotation]] on my 3/3 [[Scolding Administrator]] to make a 3/3 Inkling on my opponent’s end step. That left me with two 3/3 flyers and a 1/1 flyer against him at 4 life with no flying blockers. He had two cards in hand, and one of them was [[Ajani's Response]].
 
-I untapped and went for [[Dig Site Inventory]] on one of my 3/3 flyers, the [[Sneering Shadewright]]. Unfortunately, this unlocked the [[Repel Calamity]] in his hand to kill it, while [[Ajani's Response]] killed my other attacking 3/3 flyer. Instead of dying to a swing where I’d done absolutely nothing, he took only 1. He found removal for the last flyer a turn later, and I died horribly a few turns after that.
+I untapped and went for [[Dig Site Inventory]] on one of my 3/3 flyers, the [[Sneering Shadewriter]]. Unfortunately, this unlocked the [[Repel Calamity]] in his hand to kill it, while [[Ajani's Response]] killed my other attacking 3/3 flyer. Instead of dying to a swing where I’d done absolutely nothing, he took only 1. He found removal for the last flyer a turn later, and I died horribly a few turns after that.
 
 I took a long walk and put my head down for a while after that loss. I could’ve stolen the match from an undoubtedly better deck, and instead I threw it away on a bad pump spell. In hindsight, I think I was trying to play around a second Ajani's Response because he had six mana, but that was completely unreasonable given the texture of his hand. This was probably the most disappointed I’d been in my gameplay in a long time — maybe ever.
 
@@ -283,7 +283,7 @@ After blasting some music through my headphones to reset mentally, I came back f
 
 For the last match, I was paired against Jean-Emmanuel Depraz in a Silverquill mirror. In Game 1, I landed a [[Stirring Hopesinger]] on turn five and immediately got two Repartee triggers, which effectively ended the game. The card didn’t pass the groan test from JED, which suggests to me that it isn’t very fun to play against.
 
-In Game 2, I landed Hopesinger again, but he had an answer. I bought it back with [[Pull from the Grave]] — an important card to this story — then recast it, but he had another kill spell and the game returned to parity. A few turns later, as I was behind on board, I cast [[Render Speechless]]. He tried to cast [[Pull from the Grave]] at instant speed in response, but I pointed out that it was a sorcery. He shook his head and acknowledged the punt, and I ended up making him discard the Pull. The missed card of value became the difference in the match as I drained him out with two [[Sneering Shadewright]]s.
+In Game 2, I landed Hopesinger again, but he had an answer. I bought it back with [[Pull from the Grave]] — an important card to this story — then recast it, but he had another kill spell and the game returned to parity. A few turns later, as I was behind on board, I cast [[Render Speechless]]. He tried to cast [[Pull from the Grave]] at instant speed in response, but I pointed out that it was a sorcery. He shook his head and acknowledged the punt, and I ended up making him discard the Pull. The missed card of value became the difference in the match as I drained him out with two [[Sneering Shadewriter]]s.
 
 In my second draft, punting really was a two-way street.
 
