@@ -147,9 +147,9 @@ With most of the cards ready to go, I ended up registering 74 of the 75 cards fr
 
 ## Playing More Standard Than I Signed Up For at RC Milwaukee
 
-Going into the tournament, I felt at ease with the outcome, good or bad. As I told my friends repeatedly that weekend, my goal was actually to “minimize the amount of Standard I would be playing” by registering Boros Dragons. I was genuinely excited to play the Limited Championship Qualifier on Sunday after I inevitably failed to make Day 2.
+Going into the tournament, I felt at ease with the outcome, good or bad. As I told my friends repeatedly that weekend, my goal was actually to “minimize the amount of Standard I would be playing” by registering Boros Dragons. I was genuinely excited to play the Limited Championship Qualifier on Sunday after I inevitably failed to make Day 2. After all, I had played fewer than five matches with the deck entering the tournament, so I had no real expectations.
 
-After all, I had played fewer than five matches with the deck entering the tournament, so I had no real expectations. The day before the event, I played some ECL LCQs for fun and spent time finding the last few cards for the tournament. My friends picked up a single [[Dragonhawk, Fate's Tempest]] from The Mana Vault on their way up, and I borrowed a clutch set of [[Requisition Raid]]s from a friend. Somehow, I found all the cards I needed.
+The day before the event, I played some ECL LCQs for fun and spent time finding the last few cards for the tournament. My friends picked up a single [[Dragonhawk, Fate's Tempest]] from The Mana Vault on their way up, and I borrowed a clutch set of [[Requisition Raid]]s from a friend. Somehow, I found all the cards I needed.
 
 The tournament went much better than expected. I started 6-0 and immediately qualified for Day 2, squashing my dreams of playing the LCQ on Sunday.
 
