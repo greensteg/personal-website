@@ -93,7 +93,7 @@ Since the ReCQ was small — just eight people — that put me into the finals, 
 
 Fast-forward a few months. I had a great time in Asia not playing much Magic, aside from a few weekends of Arena Direct, and both TLA and ECL released while I was away. When I arrived back in the US in late January, the Standard metagame had mostly settled around two powerful pillars: Izzet Lessons, with [[Artist's Talent]] and [[Monument to Endurance]], and Simic Cub, with [[Badgermole Cub]] and [[Nature's Rhythm]]. There were also some Four-Color Elementals and Izzet Spellementals builds floating around from PT ECL, with [[Sunderflock]] as a clean answer to Cub.
 
-I had about a month to figure out what to play for RC Milwaukee. I only had one invite and didn’t want to fly to Portland to play a bunch of LCQs on Friday, but the event crept up on me, and a week out I still had no idea what I was doing.
+I had about a month to figure out what to play for RC Milwaukee. I only had one invite, and I didn’t want to fly to Portland just to play LCQs on Friday, so this was the event I had circled. But it crept up on me, and a week out, I still had no idea what I was doing.
 
 I had trialed most of the decks a little on MTGA, but none of them felt particularly good to play. Zevin Faust's Azorius Prison list stood out as interesting — many of my friends commented that the list felt very “me,” whatever that means — and I picked up a bunch of the cards a few days before the RC.
 
