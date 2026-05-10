@@ -42,7 +42,11 @@ www.wentongzhang.com {
 	# SPA-friendly: try the file, then fall back to index.html
 	try_files {path} {path}/ /index.html
 
+	# Revalidate content pages and post data so article updates show up promptly.
+	@content path *.html *.md *.json /shared/mtg.js
+	header @content Cache-Control "no-cache"
+
 	# Cache static assets
-	@static path *.html *.js *.css *.md *.json
+	@static path *.js *.css
 	header @static Cache-Control "public, max-age=3600"
 }

@@ -303,6 +303,18 @@
         return storagePrefix + normalizeCardName(cardName).toLowerCase();
     }
 
+    function buildScryfallSearchUrl(cardName) {
+        const name = normalizeCardName(cardName);
+        return `https://scryfall.com/search?q=${encodeURIComponent(`!"${name}"`)}`;
+    }
+
+    function parseCardReference(rawReference) {
+        const [rawName, rawLabel] = String(rawReference || '').split('|');
+        const cardName = normalizeCardName(rawName);
+        const label = normalizeCardName(rawLabel || rawName);
+        return { cardName, label };
+    }
+
     function readStoredCard(cardName) {
         try {
             const raw = global.localStorage && localStorage.getItem(storageKey(cardName));
@@ -503,17 +515,21 @@
 
     function createCardLink(cardName, cardData, options) {
         const name = normalizeCardName(cardName);
+        const label = normalizeCardName(options && options.label) || name;
         const skipPreview = options && options.skipPreview;
 
         if (!cardData) {
-            const fallback = document.createElement('span');
-            fallback.textContent = name;
-            fallback.className = 'text-gray-700';
+            const fallback = document.createElement('a');
+            fallback.textContent = label;
+            fallback.className = 'mtg-card-link';
+            fallback.href = buildScryfallSearchUrl(name);
+            fallback.target = '_blank';
+            fallback.rel = 'noreferrer noopener';
             return fallback;
         }
 
         const link = document.createElement('a');
-        link.textContent = name;
+        link.textContent = label;
         link.className = 'mtg-card-link';
         link.href = cardData.scryfall_uri || '#';
         link.target = '_blank';
@@ -539,8 +555,9 @@
         return link;
     }
 
-    function buildCardPlaceholder(cardName) {
-        return `<span class="mtg-card-slot" data-card-name="${encodeDataAttribute(normalizeCardName(cardName))}">${escapeHtml(normalizeCardName(cardName))}</span>`;
+    function buildCardPlaceholder(rawReference) {
+        const { cardName, label } = parseCardReference(rawReference);
+        return `<span class="mtg-card-slot" data-card-name="${encodeDataAttribute(cardName)}" data-card-label="${encodeDataAttribute(label)}">${escapeHtml(label)}</span>`;
     }
 
     function toBase64(value) {
@@ -1080,13 +1097,14 @@
 
     async function hydrateCardReference(node, fallbackName, options) {
         const cardName = fallbackName || (node && node.dataset ? node.dataset.cardName : '');
+        const label = node && node.dataset ? node.dataset.cardLabel : '';
         if (!node || !cardName) {
             return;
         }
 
         const parent = node.parentNode;
         const card = await fetchCard(cardName);
-        const replacement = createCardLink(cardName, card, options);
+        const replacement = createCardLink(cardName, card, Object.assign({}, options, { label }));
         if (parent) {
             parent.replaceChild(replacement, node);
         }
