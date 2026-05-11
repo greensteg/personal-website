@@ -43,10 +43,10 @@ www.wentongzhang.com {
 	try_files {path} {path}/ /index.html
 
 	# Revalidate content pages and post data so article updates show up promptly.
-	@content path *.html *.md *.json /shared/mtg.js
+	@content path / *.html *.md *.json /shared/*.js
 	header @content Cache-Control "no-cache"
 
 	# Cache static assets
-	@static path *.js *.css
+	@static path *.css *.svg *.png *.jpg *.ico
 	header @static Cache-Control "public, max-age=3600"
 }

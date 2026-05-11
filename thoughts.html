@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thoughts - Wentong Zhang</title>
+    <meta name="description" content="Essays and notes by Wentong Zhang.">
+    <link rel="canonical" href="https://www.wentongzhang.com/thoughts.html">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="Thoughts - Wentong Zhang">
+    <meta property="og:description" content="Essays and notes by Wentong Zhang.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.wentongzhang.com/thoughts.html">
+    <meta property="og:site_name" content="Wentong Zhang">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Thoughts - Wentong Zhang">
+    <meta name="twitter:description" content="Essays and notes by Wentong Zhang.">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html {
@@ -17,15 +28,23 @@
     <!-- Thoughts Page -->
     <section class="min-h-screen py-12 sm:py-20 pt-20 sm:pt-32">
         <div class="max-w-3xl mx-auto px-4 sm:px-6">
-
+            <div class="max-w-2xl mb-10 sm:mb-12">
+                <h1 class="text-3xl sm:text-4xl font-light text-gray-900 tracking-wide mb-4">Thoughts</h1>
+                <p class="text-gray-600 leading-loose text-sm sm:text-base">Essays and notes on software, systems, games, and whatever else I can’t stop thinking about.</p>
+            </div>
             <!-- Blog Posts Container -->
             <div id="blogPosts">
-                <!-- Posts will be loaded here -->
+                <div class="space-y-4">
+                    <div class="bg-white border border-gray-100 rounded-lg p-6 sm:p-8 shadow-sm">
+                        <p class="text-gray-500 text-sm sm:text-base">Loading posts...</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="shared/meta.js"></script>
     <script src="shared/utils.js"></script>
     <script src="shared/nav.js"></script>
     <script>
@@ -34,6 +53,18 @@
 
         // Blog posts data
         let blogPosts = [];
+
+        function parseTags(frontMatter, markdownContent) {
+            if (frontMatter.tags) {
+                return String(frontMatter.tags).split(',').map(tag => tag.trim()).filter(Boolean);
+            }
+
+            if (markdownContent.includes('[[']) || markdownContent.includes('```deck')) {
+                return ['Magic'];
+            }
+
+            return [];
+        }
 
         // Auto-discover blog posts from index file
         async function discoverBlogPosts() {
@@ -68,7 +99,8 @@
                             title: frontMatter.title || 'Untitled',
                             date: frontMatter.date || 'Unknown date',
                             content: markdownContent,
-                            slug: frontMatter.slug || postFile.split('/').pop().replace('.md', '')
+                            slug: frontMatter.slug || postFile.split('/').pop().replace('.md', ''),
+                            tags: parseTags(frontMatter, markdownContent)
                         });
                     }
                 }
@@ -96,25 +128,33 @@
 
             blogPosts.forEach(post => {
                 const postElement = document.createElement('article');
-                postElement.className = 'bg-white rounded-lg p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-sm cursor-pointer hover:shadow-md sm:hover:scale-[1.02] transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
+                postElement.className = 'group bg-white border border-gray-100 rounded-lg p-5 sm:p-7 mb-5 sm:mb-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-100 transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
 
-                // Create preview (first 3 lines or ~150 characters)
-                const lines = post.content.split('\n').filter(line => line.trim() !== '');
-                const preview = lines.slice(0, 3).join('\n');
-                const truncatedPreview = preview.length > 150 ? preview.substring(0, 150) + '...' : preview + '...';
+                const preview = excerptMarkdown(post.content, 210);
+                const tagHtml = post.tags.map(tag => `<span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">${tag}</span>`).join('');
 
                 postElement.innerHTML = `
-                    <div class="mb-3 sm:mb-4">
+                    <div class="mb-3 flex flex-wrap items-center gap-2">
                         <time class="text-xs sm:text-sm text-gray-500">${post.date}</time>
+                        ${tagHtml ? `<span class="text-gray-300">/</span><div class="flex flex-wrap gap-2">${tagHtml}</div>` : ''}
                     </div>
-                    <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-3 sm:mb-4 tracking-wide">${post.title}</h3>
-                    <div class="text-gray-600 leading-loose whitespace-pre-line mb-3 sm:mb-4 text-sm sm:text-base">${truncatedPreview}</div>
-                    <span class="text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200 text-sm sm:text-base">Read more →</span>
+                    <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-3 tracking-wide group-hover:text-blue-700 transition-colors duration-200">${post.title}</h2>
+                    <p class="text-gray-600 leading-relaxed mb-4 text-sm sm:text-base">${preview}</p>
+                    <span class="text-blue-600 font-medium group-hover:text-blue-700 transition-colors duration-200 text-sm sm:text-base">Read more →</span>
                 `;
 
                 postElement.onclick = () => {
-                    window.location.href = `post.html?id=${post.id}`;
+                    window.location.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
                 };
+                postElement.tabIndex = 0;
+                postElement.setAttribute('role', 'link');
+                postElement.setAttribute('aria-label', `Read ${post.title}`);
+                postElement.addEventListener('keydown', event => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        window.location.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
+                    }
+                });
                 container.appendChild(postElement);
             });
         }

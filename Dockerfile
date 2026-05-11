@@ -5,5 +5,6 @@ COPY index.html /srv/
 COPY thoughts.html /srv/
 COPY post.html /srv/
 COPY contact.html /srv/
+COPY assets/ /srv/assets/
 COPY content/ /srv/content/
 COPY shared/ /srv/shared/

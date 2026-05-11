@@ -3,6 +3,7 @@ title: "On Working with Agents"
 date: "April 17, 2026"
 id: 2
 display: true
+tags: "Engineering"
 ---
 
 It’s hard to overstate how quickly AI coding workflows are evolving. If we want to keep pace, our processes need to evolve alongside the tools. These are notes on where software workflows were, where I am now, and where I think we should push next.

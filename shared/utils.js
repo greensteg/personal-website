@@ -56,7 +56,7 @@ async function renderMarkdownContent(containerId, filePath) {
     
     if (!content) {
         const container = document.getElementById(containerId);
-        container.innerHTML = '<p class="text-red-500">Error: Could not load content from ' + filePath + '</p>';
+        container.innerHTML = '<p class="rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-700">Error: could not load content.</p>';
         return;
     }
     
@@ -92,15 +92,15 @@ function applyContentStyling(container) {
     // Style paragraphs
     container.querySelectorAll('p').forEach((p, index) => {
         if (index === 0 && container.id === 'aboutContent') {
-            p.className = 'text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 leading-loose';
+            p.className = 'text-lg sm:text-xl text-gray-700 mb-6 sm:mb-8 leading-loose';
         } else {
-            p.className = 'text-gray-600 leading-loose mb-4 sm:mb-6 text-sm sm:text-base';
+            p.className = 'text-gray-700 leading-loose mb-4 sm:mb-6 text-sm sm:text-base';
         }
     });
 
     container.querySelectorAll('p').forEach(p => {
         if (p.nextElementSibling && ['OL', 'UL'].includes(p.nextElementSibling.tagName)) {
-            p.className = 'text-gray-600 leading-loose mb-2 sm:mb-3 text-sm sm:text-base';
+            p.className = 'text-gray-700 leading-loose mb-2 sm:mb-3 text-sm sm:text-base';
         }
     });
     

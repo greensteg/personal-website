@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post - Wentong Zhang</title>
+    <meta name="description" content="An essay by Wentong Zhang.">
+    <link rel="canonical" href="https://www.wentongzhang.com/post.html">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <meta property="og:title" content="Post - Wentong Zhang">
+    <meta property="og:description" content="An essay by Wentong Zhang.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.wentongzhang.com/post.html">
+    <meta property="og:site_name" content="Wentong Zhang">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Post - Wentong Zhang">
+    <meta name="twitter:description" content="An essay by Wentong Zhang.">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         html {
@@ -21,23 +32,29 @@
                 ← Back to Thoughts
             </a>
             <div id="singlePostContent">
-                <!-- Single post content will be loaded here -->
+                <div class="max-w-2xl">
+                    <p class="text-gray-500 text-sm sm:text-base">Loading post...</p>
+                </div>
             </div>
         </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="shared/meta.js"></script>
     <script src="shared/utils.js"></script>
     <script src="shared/mtg.js"></script>
     <script src="shared/nav.js"></script>
     <script>
         // Initialize navigation
-        initNavigation();
+        initNavigation('thoughts');
 
-        // Get post ID from URL parameters
-        function getPostIdFromUrl() {
+        // Get post key from URL parameters. Slugs are preferred; IDs remain supported.
+        function getPostKeyFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return parseInt(urlParams.get('id')) || null;
+            return {
+                slug: urlParams.get('slug'),
+                id: parseInt(urlParams.get('id')) || null
+            };
         }
 
         // Auto-discover blog posts from index file
@@ -56,7 +73,7 @@
         }
 
         // Find and load specific post
-        async function loadPost(postId) {
+        async function loadPost(postKey) {
             const postFiles = await discoverBlogPosts();
             
             // Find the post file by loading each one and checking the ID
@@ -64,9 +81,15 @@
                 const content = await loadContent(postFile);
                 if (content) {
                     const { frontMatter, content: markdownContent } = parseFrontMatter(content);
-                    if (parseInt(frontMatter.id) === postId) {
+                    const slug = frontMatter.slug || postFile.split('/').pop().replace('.md', '');
+                    const id = parseInt(frontMatter.id);
+                    const matchesSlug = postKey.slug && slug === postKey.slug;
+                    const matchesId = postKey.id && id === postKey.id;
+
+                    if (matchesSlug || matchesId) {
                         return {
-                            id: parseInt(frontMatter.id),
+                            id,
+                            slug,
                             title: frontMatter.title || 'Untitled',
                             date: frontMatter.date || 'Unknown date',
                             content: markdownContent
@@ -81,11 +104,11 @@
         function applyPostStyling(container) {
             // Style headings
             container.querySelectorAll('h1').forEach(h1 => {
-                h1.className = 'text-2xl sm:text-3xl font-light text-gray-900 mb-6 sm:mb-8 tracking-wide';
+                h1.className = 'text-3xl sm:text-4xl font-light text-gray-900 mb-6 sm:mb-8 tracking-wide leading-tight';
             });
 
             container.querySelectorAll('h2').forEach(h2 => {
-                h2.className = 'text-xl sm:text-2xl font-medium text-gray-900 mb-4 sm:mb-6 mt-10 sm:mt-14 tracking-wide';
+                h2.className = 'text-2xl sm:text-3xl font-medium text-gray-900 mb-5 sm:mb-6 mt-12 sm:mt-16 tracking-wide leading-tight';
             });
 
             container.querySelectorAll('h3').forEach(h3 => {
@@ -94,12 +117,12 @@
             
             // Style paragraphs
             container.querySelectorAll('p').forEach(p => {
-                p.className = 'text-gray-600 leading-loose mb-6 sm:mb-8 text-sm sm:text-base';
+                p.className = 'text-gray-700 leading-loose mb-6 sm:mb-8 text-base sm:text-[1.0625rem]';
             });
 
             container.querySelectorAll('p').forEach(p => {
                 if (p.nextElementSibling && ['OL', 'UL'].includes(p.nextElementSibling.tagName)) {
-                    p.className = 'text-gray-600 leading-loose mb-2 sm:mb-3 text-sm sm:text-base';
+                    p.className = 'text-gray-700 leading-loose mb-2 sm:mb-3 text-base sm:text-[1.0625rem]';
                 }
             });
             
@@ -118,7 +141,7 @@
             });
             
             container.querySelectorAll('li').forEach(li => {
-                li.className = 'text-gray-600 leading-relaxed text-sm sm:text-base pl-1';
+                li.className = 'text-gray-700 leading-relaxed text-base sm:text-[1.0625rem] pl-1';
             });
 
             container.querySelectorAll('li p').forEach(p => {
@@ -148,15 +171,15 @@
 
         // Load and display the post
         async function displayPost() {
-            const postId = getPostIdFromUrl();
+            const postKey = getPostKeyFromUrl();
             
-            if (!postId) {
+            if (!postKey.slug && !postKey.id) {
                 // No post ID, redirect to thoughts page
                 window.location.href = 'thoughts.html';
                 return;
             }
             
-            const post = await loadPost(postId);
+            const post = await loadPost(postKey);
             
             if (!post) {
                 // Post not found, redirect to thoughts page
@@ -164,8 +187,20 @@
                 return;
             }
 
-            // Update page title
-            document.title = `${post.title} - Wentong Zhang`;
+            const canonicalUrl = `https://www.wentongzhang.com/post.html?slug=${encodeURIComponent(post.slug)}`;
+            const canonical = document.head.querySelector('link[rel="canonical"]');
+            if (canonical) {
+                canonical.href = canonicalUrl;
+            }
+            if (postKey.id && !postKey.slug) {
+                window.history.replaceState(null, '', `post.html?slug=${encodeURIComponent(post.slug)}`);
+            }
+            updatePageMeta({
+                title: post.title,
+                description: excerptMarkdown(post.content, 160),
+                url: canonicalUrl,
+                type: 'article'
+            });
             
             // Render the post
             const renderedPost = window.MtgContent
@@ -174,11 +209,11 @@
             
             const singlePostContent = document.getElementById('singlePostContent');
             singlePostContent.innerHTML = `
-                <article class="max-w-2xl">
-                    <div class="mb-6">
+                <article class="max-w-[42rem]">
+                    <div class="mb-5">
                         <time class="text-sm text-gray-500">${post.date}</time>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-light text-gray-900 mb-6 sm:mb-8 tracking-wide">${post.title}</h1>
+                    <h1 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 sm:mb-10 tracking-wide leading-tight">${post.title}</h1>
                     <div class="prose prose-lg max-w-none">${renderedPost.html}</div>
                 </article>
             `;

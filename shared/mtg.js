@@ -1,5 +1,6 @@
 (function(global) {
     const memoryCardCache = new Map();
+    const pendingCardRequests = new Map();
     const storagePrefix = 'mtg-card-cache:';
     const storageTtlMs = 1000 * 60 * 60 * 24 * 7;
     let previewRoot = null;
@@ -76,9 +77,9 @@
             .mtg-deck-root {
                 margin: 2rem 0;
                 border: 1px solid #e2e8f0;
-                border-radius: 0.625rem;
+                border-radius: 0.5rem;
                 background: #fff;
-                box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+                box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
                 overflow: hidden;
             }
 
@@ -89,7 +90,7 @@
                 gap: 0.75rem;
                 padding: 1rem 1.25rem;
                 border-bottom: 1px solid #e2e8f0;
-                background: #f8fafc;
+                background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             }
 
             .mtg-deck-header-left {
@@ -118,6 +119,7 @@
             .mtg-deck-meta a {
                 color: #3b82f6;
                 text-decoration: none;
+                font-weight: 500;
             }
 
             .mtg-deck-meta a:hover {
@@ -256,16 +258,17 @@
                 border: 1px solid #e2e8f0;
                 border-radius: 0.375rem;
                 background: #fff;
-                padding: 0.3125rem 0.625rem;
-                font-size: 0.6875rem;
+                padding: 0.375rem 0.75rem;
+                font-size: 0.75rem;
                 font-weight: 500;
                 color: #64748b;
                 cursor: pointer;
                 white-space: nowrap;
-                transition: border-color 0.15s ease, color 0.15s ease;
+                transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
             }
 
             .mtg-deck-copy-btn:hover {
+                background: #f8fafc;
                 border-color: #cbd5e1;
                 color: #334155;
             }
@@ -273,8 +276,9 @@
             .mtg-deck-footer {
                 display: flex;
                 justify-content: flex-end;
-                padding: 0.625rem 1.25rem;
+                padding: 0.75rem 1.25rem;
                 border-top: 1px solid #f1f5f9;
+                background: #fff;
             }
         `;
 
@@ -398,21 +402,32 @@
             return stored;
         }
 
-        try {
-            const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(normalized)}`);
-            if (!response.ok) {
-                return null;
-            }
-
-            const payload = await response.json();
-            const sanitized = sanitizeCardPayload(payload);
-            memoryCardCache.set(normalized, sanitized);
-            writeStoredCard(normalized, sanitized);
-            return sanitized;
-        } catch (error) {
-            console.error(`Failed to load MTG card "${normalized}"`, error);
-            return null;
+        if (pendingCardRequests.has(normalized)) {
+            return pendingCardRequests.get(normalized);
         }
+
+        const request = (async () => {
+            try {
+                const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(normalized)}`);
+                if (!response.ok) {
+                    return null;
+                }
+
+                const payload = await response.json();
+                const sanitized = sanitizeCardPayload(payload);
+                memoryCardCache.set(normalized, sanitized);
+                writeStoredCard(normalized, sanitized);
+                return sanitized;
+            } catch (error) {
+                console.error(`Failed to load MTG card "${normalized}"`, error);
+                return null;
+            } finally {
+                pendingCardRequests.delete(normalized);
+            }
+        })();
+
+        pendingCardRequests.set(normalized, request);
+        return request;
     }
 
     function ensurePreviewRoot() {

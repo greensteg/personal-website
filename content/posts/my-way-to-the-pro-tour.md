@@ -3,6 +3,7 @@ title: "A Hope, a Dreamdew, and a Pro Tour"
 date: "May 8, 2026"
 id: 3
 display: true
+tags: "Magic"
 ---
 
 I played my first Pro Tour this past weekend in Las Vegas, and the experience was beyond anything I expected. I finished 19th with an 11-5 record on the weekend: 4-2 in draft, 7-3 in constructed. Along the way, I lost my win-and-in for Worlds. It’s hard to complain about a finish like that, but I’d be lying if I said I wasn’t at least a little disappointed not to get there in the last match.
