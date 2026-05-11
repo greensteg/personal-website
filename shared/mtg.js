@@ -1,7 +1,7 @@
 (function(global) {
     const memoryCardCache = new Map();
     const pendingCardRequests = new Map();
-    const storagePrefix = 'mtg-card-cache:';
+    const storagePrefix = 'mtg-card-cache-v2:';
     const storageTtlMs = 1000 * 60 * 60 * 24 * 7;
     let previewRoot = null;
     let previewAnchor = null;
@@ -383,6 +383,19 @@
         return null;
     }
 
+    function extractManaCost(card) {
+        if (card.mana_cost) {
+            return card.mana_cost;
+        }
+        if (Array.isArray(card.card_faces)) {
+            const faceCosts = card.card_faces.map(face => face.mana_cost || '');
+            if (faceCosts.some(cost => cost.length > 0)) {
+                return faceCosts.join(' // ');
+            }
+        }
+        return '';
+    }
+
     function sanitizeCardPayload(card) {
         return {
             name: card.name,
@@ -390,7 +403,7 @@
             previewImage: getPreviewImage(card),
             layout: card.layout || null,
             type_line: card.type_line || '',
-            mana_cost: card.mana_cost || ''
+            mana_cost: extractManaCost(card)
         };
     }
 
