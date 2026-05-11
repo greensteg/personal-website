@@ -2,7 +2,11 @@
     const memoryCardCache = new Map();
     const pendingCardRequests = new Map();
     const storagePrefix = 'mtg-card-cache-v2:';
-    const storageTtlMs = 1000 * 60 * 60 * 24 * 7;
+    const storageTtlMs = 1000 * 60 * 60 * 24 * 30;
+    const SCRYFALL_BATCH_SIZE = 75;
+    const SCRYFALL_BATCH_DELAY_MS = 30;
+    const batchQueue = new Map(); // normalizedName → resolve fn
+    let batchTimer = null;
     let previewRoot = null;
     let previewAnchor = null;
     let previewHideTimer = null;
@@ -431,28 +435,105 @@
             return pendingCardRequests.get(normalized);
         }
 
-        const request = (async () => {
-            try {
-                const response = await fetch(`https://api.scryfall.com/cards/named?exact=${encodeURIComponent(normalized)}`);
-                if (!response.ok) {
-                    return null;
-                }
-
-                const payload = await response.json();
-                const sanitized = sanitizeCardPayload(payload);
-                memoryCardCache.set(normalized, sanitized);
-                writeStoredCard(normalized, sanitized);
-                return sanitized;
-            } catch (error) {
-                console.error(`Failed to load MTG card "${normalized}"`, error);
-                return null;
-            } finally {
-                pendingCardRequests.delete(normalized);
-            }
-        })();
-
+        // Queue into a bulk batch instead of firing a per-card request.
+        // Scryfall asks for one request at a time; the /cards/collection
+        // endpoint takes up to 75 identifiers per call, which keeps card-heavy
+        // pages under a couple of requests instead of dozens-in-parallel.
+        const request = new Promise(resolve => {
+            batchQueue.set(normalized, resolve);
+        });
         pendingCardRequests.set(normalized, request);
+
+        if (batchTimer === null) {
+            batchTimer = setTimeout(flushCardBatch, SCRYFALL_BATCH_DELAY_MS);
+        }
+
         return request;
+    }
+
+    async function flushCardBatch() {
+        batchTimer = null;
+        if (batchQueue.size === 0) {
+            return;
+        }
+
+        const entries = Array.from(batchQueue.entries());
+        batchQueue.clear();
+
+        for (let i = 0; i < entries.length; i += SCRYFALL_BATCH_SIZE) {
+            await fetchBatchChunk(entries.slice(i, i + SCRYFALL_BATCH_SIZE));
+        }
+    }
+
+    async function fetchBatchChunk(entries, attempt = 0) {
+        const resolveAll = (lookup) => {
+            entries.forEach(([name, resolve]) => {
+                const card = lookup ? lookup(name) : null;
+                if (card) {
+                    const sanitized = sanitizeCardPayload(card);
+                    memoryCardCache.set(name, sanitized);
+                    writeStoredCard(name, sanitized);
+                    resolve(sanitized);
+                } else {
+                    memoryCardCache.set(name, null);
+                    resolve(null);
+                }
+                pendingCardRequests.delete(name);
+            });
+        };
+
+        // Scryfall's /cards/collection matches by face name, not by full
+        // combined name — e.g. "Push" finds Push // Pull, but "Push // Pull"
+        // doesn't. Strip "// X" suffixes before sending; the returned card's
+        // face names get reverse-indexed below so the original lookup name
+        // still resolves.
+        const identifiers = entries.map(([name]) => ({ name: name.split(/\s*\/\/\s*/)[0] }));
+
+        let response;
+        try {
+            response = await fetch('https://api.scryfall.com/cards/collection', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifiers })
+            });
+        } catch (error) {
+            console.error('Failed to load MTG card batch', error);
+            resolveAll(null);
+            return;
+        }
+
+        if (response.status === 429 && attempt < 3) {
+            const retryMs = 400 * Math.pow(2, attempt);
+            await new Promise(r => setTimeout(r, retryMs));
+            return fetchBatchChunk(entries, attempt + 1);
+        }
+
+        if (!response.ok) {
+            resolveAll(null);
+            return;
+        }
+
+        let payload;
+        try {
+            payload = await response.json();
+        } catch (error) {
+            resolveAll(null);
+            return;
+        }
+
+        const byName = new Map();
+        (payload.data || []).forEach(card => {
+            byName.set(card.name.toLowerCase(), card);
+            if (Array.isArray(card.card_faces)) {
+                card.card_faces.forEach(face => {
+                    if (face.name) {
+                        byName.set(face.name.toLowerCase(), card);
+                    }
+                });
+            }
+        });
+
+        resolveAll(name => byName.get(name.toLowerCase()) || null);
     }
 
     function ensurePreviewRoot() {
