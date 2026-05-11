@@ -1123,8 +1123,7 @@
         const allCards = deck.sections.flatMap(s => s.cards);
         const firstCardName = allCards.length > 0 ? allCards[0].name : null;
 
-        // Fetch all mainboard cards, then re-render grouped by type
-        const mainSection = deck.sections.find(s => s.name === 'Main Deck');
+        // mainSection is already declared above for the header meta count
         const sideSection = deck.sections.find(s => s.name !== 'Main Deck');
 
         // Fetch ALL card data (main + side) in parallel
