@@ -58,7 +58,7 @@
                 return String(frontMatter.tags).split(',').map(tag => tag.trim()).filter(Boolean);
             }
 
-            if (markdownContent.includes('[[']) || markdownContent.includes('```deck')) {
+            if (markdownContent.includes('[[') || markdownContent.includes('```deck')) {
                 return ['Magic'];
             }
 
