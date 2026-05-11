@@ -209,11 +209,15 @@
             }
 
             .mtg-mana-face-sep {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 0.875rem;
+                padding: 0 3px;
                 color: #64748b;
                 font-size: 0.8125rem;
-                font-weight: 500;
+                font-weight: 600;
                 line-height: 1;
-                padding: 0 3px;
             }
 
             /* ── Deck preview pane ── */
