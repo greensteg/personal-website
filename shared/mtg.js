@@ -134,6 +134,18 @@
                 color: #cbd5e1;
             }
 
+            .mtg-deck-meta-arrow {
+                display: inline-block;
+                margin-left: 0.1875rem;
+                font-size: 0.6875rem;
+                color: currentColor;
+                transition: transform 0.15s ease;
+            }
+
+            .mtg-deck-meta a:hover .mtg-deck-meta-arrow {
+                transform: translate(1px, -1px);
+            }
+
             .mtg-deck-body {
                 display: flex;
                 min-height: 0;
@@ -705,6 +717,17 @@
         return JSON.parse(fromBase64(value));
     }
 
+    function sourceHostLabel(url) {
+        try {
+            const host = new URL(url).hostname.replace(/^www\./, '');
+            // Strip common generic TLDs for known sites (moxfield.com → moxfield,
+            // mtggoldfish.com → mtggoldfish), leave specialty TLDs alone (magic.gg).
+            return host.replace(/\.(com|net|org)$/, '');
+        } catch (error) {
+            return 'source';
+        }
+    }
+
     function parseDeckMetadata(deckText) {
         const lines = deckText.replace(/\r\n/g, '\n').split('\n');
         const metadata = {};
@@ -941,31 +964,50 @@
             headerLeft.appendChild(title);
         }
 
-        if (deck.format || deck.sourceUrl) {
+        const metaParts = [];
+        const mainSection = (deck.sections || []).find(s => s.name === 'Main Deck');
+        const mainCount = mainSection
+            ? mainSection.cards.reduce((sum, c) => sum + c.qty, 0)
+            : 0;
+        if (mainCount > 0) {
+            metaParts.push({ kind: 'text', value: `${mainCount} cards` });
+        }
+        if (deck.format) {
+            metaParts.push({ kind: 'text', value: deck.format });
+        }
+        if (deck.sourceUrl) {
+            metaParts.push({ kind: 'source', value: deck.sourceUrl });
+        }
+
+        if (metaParts.length > 0) {
             const meta = document.createElement('div');
             meta.className = 'mtg-deck-meta';
 
-            if (deck.format) {
-                const format = document.createElement('span');
-                format.textContent = deck.format;
-                meta.appendChild(format);
-            }
-
-            if (deck.format && deck.sourceUrl) {
-                const sep = document.createElement('span');
-                sep.className = 'mtg-deck-meta-sep';
-                sep.textContent = '·';
-                meta.appendChild(sep);
-            }
-
-            if (deck.sourceUrl) {
-                const source = document.createElement('a');
-                source.href = deck.sourceUrl;
-                source.target = '_blank';
-                source.rel = 'noreferrer noopener';
-                source.textContent = 'View source';
-                meta.appendChild(source);
-            }
+            metaParts.forEach((part, i) => {
+                if (i > 0) {
+                    const sep = document.createElement('span');
+                    sep.className = 'mtg-deck-meta-sep';
+                    sep.textContent = '·';
+                    meta.appendChild(sep);
+                }
+                if (part.kind === 'source') {
+                    const source = document.createElement('a');
+                    source.href = part.value;
+                    source.target = '_blank';
+                    source.rel = 'noreferrer noopener';
+                    source.textContent = sourceHostLabel(part.value);
+                    const arrow = document.createElement('span');
+                    arrow.className = 'mtg-deck-meta-arrow';
+                    arrow.textContent = '↗';
+                    arrow.setAttribute('aria-hidden', 'true');
+                    source.appendChild(arrow);
+                    meta.appendChild(source);
+                } else {
+                    const span = document.createElement('span');
+                    span.textContent = part.value;
+                    meta.appendChild(span);
+                }
+            });
 
             headerLeft.appendChild(meta);
         }
