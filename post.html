@@ -81,9 +81,10 @@
                 const content = await loadContent(postFile);
                 if (content) {
                     const { frontMatter, content: markdownContent } = parseFrontMatter(content);
-                    const slug = frontMatter.slug || postFile.split('/').pop().replace('.md', '');
+                    const filename = postFile.split('/').pop().replace('.md', '');
+                    const slug = frontMatter.slug || slugify(frontMatter.title) || filename;
                     const id = parseInt(frontMatter.id);
-                    const matchesSlug = postKey.slug && slug === postKey.slug;
+                    const matchesSlug = postKey.slug && (slug === postKey.slug || filename === postKey.slug);
                     const matchesId = postKey.id && id === postKey.id;
 
                     if (matchesSlug || matchesId) {
@@ -124,7 +125,7 @@
                 if (canonical) {
                     canonical.href = canonicalUrl;
                 }
-                if (postKey.id && !postKey.slug) {
+                if ((postKey.id && !postKey.slug) || (postKey.slug && postKey.slug !== post.slug)) {
                     window.history.replaceState(null, '', `post.html?slug=${encodeURIComponent(post.slug)}`);
                 }
                 if (window.updatePageMeta) {

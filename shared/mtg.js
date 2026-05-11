@@ -208,6 +208,14 @@
                 height: 0.875rem;
             }
 
+            .mtg-mana-face-sep {
+                color: #64748b;
+                font-size: 0.8125rem;
+                font-weight: 500;
+                line-height: 1;
+                padding: 0 3px;
+            }
+
             /* ── Deck preview pane ── */
 
             .mtg-deck-preview-pane {
@@ -727,26 +735,39 @@
             return null;
         }
 
-        const symbols = manaCostStr.match(/\{([^}]+)\}/g);
-        if (!symbols || symbols.length === 0) {
-            return null;
-        }
-
+        // Split on // to render dual-faced / adventure / split costs with a visual separator
+        const faces = manaCostStr.split(/\s*\/\/\s*/);
         const container = document.createElement('span');
         container.className = 'mtg-deck-card-mana';
+        let rendered = false;
 
-        symbols.forEach(sym => {
-            const inner = sym.slice(1, -1); // strip { }
-            const img = document.createElement('img');
-            img.className = 'mtg-mana-sym';
-            img.alt = sym;
-            // Scryfall SVG symbology: {3} → 3.svg, {U} → U.svg, {W/U} → WU.svg
-            const svgName = inner.replace(/\//g, '');
-            img.src = `https://svgs.scryfall.io/card-symbols/${encodeURIComponent(svgName)}.svg`;
-            container.appendChild(img);
+        faces.forEach(face => {
+            const symbols = face.match(/\{([^}]+)\}/g);
+            if (!symbols || symbols.length === 0) {
+                return;
+            }
+
+            if (rendered) {
+                const sep = document.createElement('span');
+                sep.className = 'mtg-mana-face-sep';
+                sep.textContent = '//';
+                container.appendChild(sep);
+            }
+
+            symbols.forEach(sym => {
+                const inner = sym.slice(1, -1); // strip { }
+                const img = document.createElement('img');
+                img.className = 'mtg-mana-sym';
+                img.alt = sym;
+                // Scryfall SVG symbology: {3} → 3.svg, {U} → U.svg, {W/U} → WU.svg
+                const svgName = inner.replace(/\//g, '');
+                img.src = `https://svgs.scryfall.io/card-symbols/${encodeURIComponent(svgName)}.svg`;
+                container.appendChild(img);
+            });
+            rendered = true;
         });
 
-        return container;
+        return rendered ? container : null;
     }
 
     const typeOrder = [

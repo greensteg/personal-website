@@ -1,5 +1,14 @@
 // Shared utility functions
 
+// Slugify a string for use in URLs (e.g. post titles).
+function slugify(text) {
+    return String(text || '')
+        .toLowerCase()
+        .replace(/['‘’]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
 // Simple markdown parser for front matter
 function parseFrontMatter(content) {
     if (!content.startsWith('---')) {

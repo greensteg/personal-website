@@ -98,7 +98,7 @@
                             title: frontMatter.title || 'Untitled',
                             date: frontMatter.date || 'Unknown date',
                             content: markdownContent,
-                            slug: frontMatter.slug || postFile.split('/').pop().replace('.md', ''),
+                            slug: frontMatter.slug || slugify(frontMatter.title) || postFile.split('/').pop().replace('.md', ''),
                             tags: parseTags(frontMatter, markdownContent)
                         });
                     }
