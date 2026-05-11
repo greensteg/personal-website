@@ -29,8 +29,7 @@
     <section class="min-h-screen py-12 sm:py-20 pt-20 sm:pt-32">
         <div class="max-w-3xl mx-auto px-4 sm:px-6">
             <div class="max-w-2xl mb-10 sm:mb-12">
-                <h1 class="text-3xl sm:text-4xl font-light text-gray-900 tracking-wide mb-4">Thoughts</h1>
-                <p class="text-gray-600 leading-loose text-sm sm:text-base">Essays and notes on software, systems, games, and whatever else I can’t stop thinking about.</p>
+                <h1 class="text-3xl sm:text-4xl font-light text-gray-900 tracking-wide">Thoughts</h1>
             </div>
             <!-- Blog Posts Container -->
             <div id="blogPosts">
@@ -127,8 +126,9 @@
             }
 
             blogPosts.forEach(post => {
-                const postElement = document.createElement('article');
-                postElement.className = 'group bg-white border border-gray-100 rounded-lg p-5 sm:p-7 mb-5 sm:mb-6 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-100 transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2';
+                const postElement = document.createElement('a');
+                postElement.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
+                postElement.className = 'group block bg-white border border-gray-100 rounded-lg p-5 sm:p-7 mb-5 sm:mb-6 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
 
                 const preview = excerptMarkdown(post.content, 210);
                 const tagHtml = post.tags.map(tag => `<span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">${tag}</span>`).join('');
@@ -143,18 +143,7 @@
                     <span class="text-blue-600 font-medium group-hover:text-blue-700 transition-colors duration-200 text-sm sm:text-base">Read more →</span>
                 `;
 
-                postElement.onclick = () => {
-                    window.location.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
-                };
-                postElement.tabIndex = 0;
-                postElement.setAttribute('role', 'link');
                 postElement.setAttribute('aria-label', `Read ${post.title}`);
-                postElement.addEventListener('keydown', event => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        window.location.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
-                    }
-                });
                 container.appendChild(postElement);
             });
         }

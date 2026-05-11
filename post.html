@@ -171,59 +171,65 @@
 
         // Load and display the post
         async function displayPost() {
-            const postKey = getPostKeyFromUrl();
-            
-            if (!postKey.slug && !postKey.id) {
-                // No post ID, redirect to thoughts page
-                window.location.href = 'thoughts.html';
-                return;
-            }
-            
-            const post = await loadPost(postKey);
-            
-            if (!post) {
-                // Post not found, redirect to thoughts page
-                window.location.href = 'thoughts.html';
-                return;
-            }
-
-            const canonicalUrl = `https://www.wentongzhang.com/post.html?slug=${encodeURIComponent(post.slug)}`;
-            const canonical = document.head.querySelector('link[rel="canonical"]');
-            if (canonical) {
-                canonical.href = canonicalUrl;
-            }
-            if (postKey.id && !postKey.slug) {
-                window.history.replaceState(null, '', `post.html?slug=${encodeURIComponent(post.slug)}`);
-            }
-            updatePageMeta({
-                title: post.title,
-                description: excerptMarkdown(post.content, 160),
-                url: canonicalUrl,
-                type: 'article'
-            });
-            
-            // Render the post
-            const renderedPost = window.MtgContent
-                ? window.MtgContent.renderMarkdown(post.content)
-                : { html: marked.parse(post.content), decks: [] };
-            
             const singlePostContent = document.getElementById('singlePostContent');
-            singlePostContent.innerHTML = `
-                <article class="max-w-[42rem]">
-                    <div class="mb-5">
-                        <time class="text-sm text-gray-500">${post.date}</time>
-                    </div>
-                    <h1 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 sm:mb-10 tracking-wide leading-tight">${post.title}</h1>
-                    <div class="prose prose-lg max-w-none">${renderedPost.html}</div>
-                </article>
-            `;
-            
-            // Apply styling to the rendered content
-            const contentDiv = singlePostContent.querySelector('.prose');
-            contentDiv.__mtgDecks = renderedPost.decks;
-            applyPostStyling(contentDiv);
-            if (window.MtgContent) {
-                window.MtgContent.enhanceMtgContent(contentDiv);
+
+            try {
+                const postKey = getPostKeyFromUrl();
+                
+                if (!postKey.slug && !postKey.id) {
+                    window.location.href = 'thoughts.html';
+                    return;
+                }
+                
+                const post = await loadPost(postKey);
+                
+                if (!post) {
+                    singlePostContent.innerHTML = '<p class="rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-700">Post not found.</p>';
+                    return;
+                }
+
+                const canonicalUrl = `https://www.wentongzhang.com/post.html?slug=${encodeURIComponent(post.slug)}`;
+                const canonical = document.head.querySelector('link[rel="canonical"]');
+                if (canonical) {
+                    canonical.href = canonicalUrl;
+                }
+                if (postKey.id && !postKey.slug) {
+                    window.history.replaceState(null, '', `post.html?slug=${encodeURIComponent(post.slug)}`);
+                }
+                if (window.updatePageMeta) {
+                    updatePageMeta({
+                        title: post.title,
+                        description: window.excerptMarkdown ? excerptMarkdown(post.content, 160) : '',
+                        url: canonicalUrl,
+                        type: 'article'
+                    });
+                } else {
+                    document.title = `${post.title} - Wentong Zhang`;
+                }
+                
+                const renderedPost = window.MtgContent
+                    ? window.MtgContent.renderMarkdown(post.content)
+                    : { html: window.marked ? window.marked.parse(post.content) : `<pre>${post.content}</pre>`, decks: [] };
+                
+                singlePostContent.innerHTML = `
+                    <article class="max-w-[42rem]">
+                        <div class="mb-5">
+                            <time class="text-sm text-gray-500">${post.date}</time>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-light text-gray-900 mb-8 sm:mb-10 tracking-wide leading-tight">${post.title}</h1>
+                        <div class="prose prose-lg max-w-none">${renderedPost.html}</div>
+                    </article>
+                `;
+                
+                const contentDiv = singlePostContent.querySelector('.prose');
+                contentDiv.__mtgDecks = renderedPost.decks;
+                applyPostStyling(contentDiv);
+                if (window.MtgContent) {
+                    window.MtgContent.enhanceMtgContent(contentDiv);
+                }
+            } catch (error) {
+                console.error('Failed to render post:', error);
+                singlePostContent.innerHTML = '<p class="rounded-lg border border-red-100 bg-red-50 p-4 text-sm text-red-700">Error loading post.</p>';
             }
         }
 

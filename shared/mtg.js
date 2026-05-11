@@ -1152,8 +1152,9 @@
 
     function renderMarkdown(markdown) {
         const processed = preprocessMarkdown(markdown);
+        const parser = global.marked && global.marked.parse ? global.marked : null;
         return {
-            html: marked.parse(processed.markdown),
+            html: parser ? parser.parse(processed.markdown) : `<pre>${escapeHtml(processed.markdown)}</pre>`,
             decks: processed.decks
         };
     }
