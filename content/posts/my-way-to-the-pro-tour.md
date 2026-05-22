@@ -12,11 +12,11 @@ The competition was the best I’ve ever faced: RC and Spotlight winners, Pro To
 
 ## A Hope and a Dreamdew Entrancer
 
-Right before my fiancée, Michelle, and I left for a two-month trip to Asia, we registered for the NRG Series Team Trios event at the beginning of November with our friend David. The event was in a suburb of Chicago, so it was easy to get to, and we figured it would be a good time either way.
+Right before my fiancée and I left for a two-month trip to Asia, we registered for the NRG Series Team Trios event at the beginning of November with our friend David. The event was in a suburb of Chicago, so it was easy to get to, and we figured it would be a good time either way.
 
-Michelle played Mono-Red in Standard, before the Screaming Nemesis ban. I played UB Frog in Modern after a friend inspired me to pick up the deck. David, meanwhile, was in the mines playing Spider-Man Sealed. Unfortunately, I punted my face off on Frog for the entire Saturday morning, and we quickly went 1-3, knocking us out of contention for prizes.
+My fiancée played Mono-Red in Standard, before the Screaming Nemesis ban. I played UB Frog in Modern after a friend inspired me to pick up the deck. David, meanwhile, was in the mines playing Spider-Man Sealed. Unfortunately, I punted my face off on Frog for the entire Saturday morning, and we quickly went 1-3, knocking us out of contention for prizes.
 
-David had brought a Modern deck, I had brought a Standard brew, and Michelle still had the Mono-Red deck she’d played that morning, so we stuck around to play some ReCQs in the afternoon.
+David had brought a Modern deck, I had brought a Standard brew, and my fiancée still had the Mono-Red deck she’d played that morning, so we stuck around to play some ReCQs in the afternoon.
 
 The first thing you should know about me as a Magic player is that I’m not afraid to register cards or decks that other people would call “suboptimal.” Some of my earliest competitive experiences, back when WotC was taking baby steps toward the Magic Spotlight Series after COVID, were with a Grixis Midrange-slash-combo homebrew featuring [[Hidetsugu and Kairi]] and [[Push // Pull]] in Standard around March of the Machine. The deck was even featured in [this Frank Karsten article](https://magic.gg/news/metagame-mentor-murders-at-karlov-manor-standard-at-magiccon-chicago).
 
@@ -142,7 +142,7 @@ I had no delusions that this was the best deck in the format, but it felt powerf
 
 I also really liked that the deck encouraged you to play spells in your first main phase. [[Momo, Friendly Flier]] and [[Sarkhan, Dragon Ascendant]] both get pumped when your dragons enter, so you’re almost always playing creatures before combat, even when they don’t have haste. That made sequencing more straightforward in many spots, which gave me less latitude to punt.
 
-Beyond the gameplay, I had played a lot of Tarkir: Dragonstorm Limited. I played the Spotlight Series event in Denver and won five collector booster boxes in the Arena Direct. Michelle convinced me to crack one or two of them on the basis that they were “free” because I had already won back more than my entry on the others. When I sorted through those cards, I found exactly four mismatched [[Sarkhan, Dragon Ascendant]] and more than enough copies of [[Magmatic Hellkite]] and [[Maelstrom of the Spirit Dragon]], which meant I already had most of the list lying around.
+Beyond the gameplay, I had played a lot of Tarkir: Dragonstorm Limited. I played the Spotlight Series event in Denver and won five collector booster boxes in the Arena Direct. My fiancée convinced me to crack one or two of them on the basis that they were “free” because I had already won back more than my entry on the others. When I sorted through those cards, I found exactly four mismatched [[Sarkhan, Dragon Ascendant]] and more than enough copies of [[Magmatic Hellkite]] and [[Maelstrom of the Spirit Dragon]], which meant I already had most of the list lying around.
 
 With most of the cards ready to go, I ended up registering 74 of the 75 cards from João's winning list, substituting one [[Cavern of Souls]] for [[Multiversal Passage]]. I really dislike [[Multiversal Passage]] in general and often felt like I wanted a [[Cavern of Souls]], especially after sideboard against blue decks, so adding the extra Cavern for three total felt natural.
 
@@ -188,7 +188,7 @@ In theory.
 
 In practice, all of that theory fell flat on its face. I lost an embarrassing number of games on the MTGA ladder with Simic Wizards and gave up once I decided I’d suffered enough.
 
-After chatting with a few more people and getting even more dizzy, I talked to Michelle about my uncertainty around deck choice. Ever the aggro-deck proponent, her sage advice was simple: “just play Boros Dragons again.”
+After chatting with a few more people and getting even more dizzy, I talked through my uncertainty around deck choice with my fiancée. Ever the aggro-deck proponent, her sage advice was simple: “just play Boros Dragons again.”
 
 I mulled it over, then realized I agreed with her. I enjoyed chatting with my friends while Lessons mirrors sweated out the last half-hour of each round. I enjoyed pinging off Otters from Stormchaser's Talent with [[Nova Hellkite]]. And honestly, I enjoyed casting a cute [[Momo, Friendly Flier|Lemur Bat Ally]] on turn one. After going through the RC together in Milwaukee, the deck felt like an old friend.
 

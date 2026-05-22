@@ -717,12 +717,26 @@
         return JSON.parse(fromBase64(value));
     }
 
+    const SOURCE_HOST_LABELS = {
+        'moxfield': 'Moxfield',
+        'mtggoldfish': 'MTGGoldfish',
+        'archidekt': 'Archidekt',
+        'mtgtop8': 'MTGTop8',
+        'tappedout': 'TappedOut',
+        'aetherhub': 'AetherHub',
+        'deckstats': 'Deckstats',
+        'scryfall': 'Scryfall',
+        'magic.gg': 'magic.gg'
+    };
+
     function sourceHostLabel(url) {
         try {
             const host = new URL(url).hostname.replace(/^www\./, '');
-            // Strip common generic TLDs for known sites (moxfield.com → moxfield,
-            // mtggoldfish.com → mtggoldfish), leave specialty TLDs alone (magic.gg).
-            return host.replace(/\.(com|net|org)$/, '');
+            const stripped = host.replace(/\.(com|net|org)$/, '');
+            if (SOURCE_HOST_LABELS[stripped]) {
+                return SOURCE_HOST_LABELS[stripped];
+            }
+            return stripped.charAt(0).toUpperCase() + stripped.slice(1);
         } catch (error) {
             return 'source';
         }
