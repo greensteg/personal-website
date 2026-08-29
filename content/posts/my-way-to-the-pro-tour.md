@@ -80,15 +80,15 @@ For finishers, I ended up running two [[Doppelgang]] because the deck drew so ma
 
 To be honest, I didn’t think this deck was close to the best deck in Standard at the time. It was abundantly clear that Vivi-based Izzet decks were objectively the best thing to be doing. That said, I loved the lines you could find with the deck, and I loved that you could play severely underestimated cards like [[Dreamdew Entrancer]] and [[Hide on the Ceiling]] while still putting up a real fight against the metagame decks.
 
-I also figured that I wouldn’t have a real gameplay edge in the Izzet mirror. I hadn’t played much Standard at that point, and anyone I faced would probably have more reps in those matchups than I did. But by playing this wacky Simic Blink list, I could drag them into the mud on lines that neither of us had much experience with — and maybe I had more experience than they did. This idea of playing a deck you’re comfortable piloting as a way to gain equity will resurface later.
+I also figured that I wouldn’t have a real gameplay edge in the Izzet mirror. I hadn’t played much Standard at that point, and anyone I faced would probably have more reps in those matchups than I did. But by playing this wacky Simic Blink list, I could drag them into the mud on lines that neither of us had much experience with, and maybe I had more experience than they did. This idea of playing a deck you’re comfortable piloting as a way to gain equity will resurface later.
 
 My first match in the ReCQ was against Simic Ouroboroid. It was a decent matchup as long as they didn’t ramp too aggressively. The version they were on played Innkeeper's Talent, which was probably good for me because it made their clock a little slower. I ended up winning 2-0 by assembling the [[Hide on the Ceiling]] plus [[Spider-Sense]] wrath in both games, eating their entire board and leaving them with very little to do.
 
-My second opponent was piloting the villain deck: Izzet Cauldron. In Game 1, I stabilized and found the [[Hide on the Ceiling]] plus [[Tishana's Tidebinder]] wrath, which took their [[Vivi Ornitier]], [[Fear of Missing Out]], and [[Agatha's Soul Cauldron]] — Hide hits artifacts too. Once I stuck a [[Quantum Riddler]], the game ended quickly.
+My second opponent was piloting the villain deck: Izzet Cauldron. In Game 1, I stabilized and found the [[Hide on the Ceiling]] plus [[Tishana's Tidebinder]] wrath, which took their [[Vivi Ornitier]], [[Fear of Missing Out]], and [[Agatha's Soul Cauldron]] (Hide hits artifacts too). Once I stuck a [[Quantum Riddler]], the game ended quickly.
 
 For Game 2, all of my artifact and enchantment hate came in: [[Annul]], [[Heritage Reclamation]], and [[Vivien Reid]]. I had enough answers for his threats, and eventually stuck a Vivien Reid he couldn’t deal with. That engine carried me over the finish line.
 
-Since the ReCQ was small — just eight people — that put me into the finals, where my opponent already had an invite and scooped to me for prizes. Invite acquired with this pile of cards.
+Since the ReCQ had just eight people, that put me into the finals, where my opponent already had an invite and scooped to me for prizes. Invite acquired with this pile of cards.
 
 ## I Really Did Not Want to Play Lessons or Landfall in Milwaukee
 
@@ -96,7 +96,7 @@ Fast-forward a few months. I had a great time in Asia not playing much Magic, as
 
 I had about a month to figure out what to play for RC Milwaukee. I only had one invite, and I didn’t want to fly to Portland just to play LCQs on Friday, so this was the event I had circled. But it crept up on me, and a week out, I still had no idea what I was doing.
 
-I had trialed most of the decks a little on MTGA, but none of them felt particularly good to play. Zevin Faust's Azorius Prison list stood out as interesting — many of my friends commented that the list felt very “me,” whatever that means — and I picked up a bunch of the cards a few days before the RC.
+I had trialed most of the decks a little on MTGA, but none of them felt particularly good to play. Zevin Faust's Azorius Prison list stood out as interesting (many of my friends commented that it felt very “me,” whatever that means), so I picked up a bunch of the cards a few days before the RC.
 
 After more testing on MTGA, though, I realized there were a lot of small decision points with UW Prison that made it incredibly hard to pilot. The deck also had very little card flow besides a couple copies of [[Enduring Curiosity]], so you really had to maximize the value of every card. Honestly, the list looked fun to pilot in theory, but in practice I thought it would give me way too many chances to misplay and punt games away because of my lack of experience. So I decided against it a couple days before the RC.
 
@@ -180,7 +180,7 @@ I had qualified for the Pro Tour.
 
 Fast-forward another two months, and the Pro Tour I’d qualified for snuck up on me too. I probably should’ve done a better job budgeting time to test and prepare for these events, but life happens.
 
-Prowess was taking Standard by storm, with a lot of new support from Secrets of Strixhaven: [[Flow State]], and to a lesser degree [[Prismari Charm]] and [[Colorstorm Stallion]]. After playing through the Horse-plus-Crab variant a few times on MTGA, I felt like I wasn’t going to gain much equity by bringing it to the event. The sequencing wasn’t impossibly hard, but it wasn’t trivial either, and I suspected that more experienced pilots — especially Pro Tour players — would be able to outmaneuver me.
+Prowess was taking Standard by storm, with a lot of new support from Secrets of Strixhaven: [[Flow State]], and to a lesser degree [[Prismari Charm]] and [[Colorstorm Stallion]]. After playing through the Horse-plus-Crab variant a few times on MTGA, I felt like I wasn’t going to gain much equity by bringing it to the event. The sequencing wasn’t impossibly hard, but it wasn’t trivial either, and I suspected that more experienced pilots, especially Pro Tour players, would be able to outmaneuver me.
 
 I did spend some time in the kitchen trying to bring something new to the table. In particular, I thought a nonzero amount about making [[Mana Sculpt]] work alongside the new [[Emeritus of Ideation]] in the Simic Blink shell I’d used to qualify for the RC. [[Thundertrap Trainer]], [[Tishana's Tidebinder]], and [[Dreamdew Entrancer]] are all Wizards too, which made Mana Sculpt even more tempting. With all that colorless mana, maybe I could cast an early [[Doppelgang]] or [[Ugin, Eye of the Storms]] and end the game quickly.
 
@@ -192,7 +192,7 @@ After chatting with a few more people and getting even more dizzy, I talked thro
 
 I mulled it over, then realized I agreed with her. I enjoyed chatting with my friends while Lessons mirrors sweated out the last half-hour of each round. I enjoyed pinging off Otters from Stormchaser's Talent with [[Nova Hellkite]]. And honestly, I enjoyed casting a cute [[Momo, Friendly Flier|Lemur Bat Ally]] on turn one. After going through the RC together in Milwaukee, the deck felt like an old friend.
 
-I still did some due diligence with new Secrets of Strixhaven cards. [[Lorehold Charm]], [[Lorehold, the Historian]], and even [[Abrade]] — mostly as an answer to [[Resonating Lute]] — all got trialed in various iterations. I ended up hating Lorehold Charm and didn’t feel like Abrade was doing much in most matchups, so I slotted in just one Lorehold to replace a [[Dragonhawk, Fate's Tempest]]. I thought the 5/5 haste stat line might matter at times, and it was a decent option to tutor for with [[Maelstrom of the Spirit Dragon]].
+I still did some due diligence with new Secrets of Strixhaven cards. [[Lorehold Charm]], [[Lorehold, the Historian]], and even [[Abrade]] (mostly as an answer to [[Resonating Lute]]) all got trialed in various iterations. I ended up hating Lorehold Charm and didn’t feel like Abrade was doing much in most matchups, so I slotted in just one Lorehold to replace a [[Dragonhawk, Fate's Tempest]]. I thought the 5/5 haste stat line might matter at times, and it was a decent option to tutor for with [[Maelstrom of the Spirit Dragon]].
 
 For the sideboard, I expected old Izzet Lessons with [[Artist's Talent]] and [[Monument to Endurance]] to be less popular than the Crab build, so I cut all my [[Requisition Raid]]s and turned them into [[High Noon]] and the last [[Rest in Peace]]. I also replaced one [[Pyroclasm]] with a [[Slagstorm]] in case I ran into more UW Prison.
 
@@ -242,7 +242,7 @@ On Thursday, I took it easy and met up with a few friends before the player regi
 
 My first draft of the Pro Tour felt amazing. I took [[Bitter Triumph]] Pack 1 Pick 1, then followed it up with [[Primary Research]] and [[Render Speechless]] in the next two picks. Quickly in Pack 1, I realized that black and white were both getting cut aggressively. Around Pack 1 Pick 7, I saw a late [[Paradox Surveyor]] and took it as a strong signal to move into Quandrix. I got a [[Geometer's Arthropod]] second-to-last pick in Pack 1; the card isn’t incredible, but a two-mana 1/4 with solid value upside going almost dead last was another strong signal.
 
-Drafting the open lane paid off almost immediately. I opened an [[Environmental Scientist]] in Pack 2, then immediately got passed an [[Emeritus of Abundance]] Pack 2 Pick 2, along with another Paradox Surveyor and some other solid Quandrix cards. I also grabbed a [[Wander Off]] in Pack 2, still hopeful that I could patch Quandrix’s biggest issue — the lack of good removal — with a black splash.
+Drafting the open lane paid off almost immediately. I opened an [[Environmental Scientist]] in Pack 2, then immediately got passed an [[Emeritus of Abundance]] Pack 2 Pick 2, along with another Paradox Surveyor and some other solid Quandrix cards. I also grabbed a [[Wander Off]] in Pack 2, still hopeful that I could patch Quandrix’s biggest issue (the lack of good removal) with a black splash.
 
 Everything came together in Pack 3, where I got passed a [[Berta, Wise Extrapolator]] as well as two late [[Titan's Grave]]s that made my black splash extremely consistent. I ended the draft feeling optimistic. I felt rewarded for finding the open lane and drafting toward my outs for the black splash.
 
@@ -268,7 +268,7 @@ Anyway, the draft with the stacked pod felt like a minor disaster. I Pack 1 Pick
 
 In Pack 2, I opened a [[Stirring Hopesinger]], which meant I was playing Silverquill whether I liked it or not. I did get a bit of gas in the pack, picking up a [[Dissection Practice]] and a few [[Adventurous Eater]]s for cheap Repartee triggers. In Pack 3, I opened a [[Scheming Silvertongue]], which locked me even further into my colors. At that point, white was completely cut, and I was struggling for playables in the last few picks of the draft. I ended the draft wondering whether I had 23 cards I could reasonably register against a World Champion.
 
-As I built my deck, I saw Arne Huschenbeth across the table with two [[Elite Interceptor]]s — I had none — and the rest of what looked like an extremely consistent Silverquill pile. I started laughing when I contemplated registering a [[Biblioplex Tomekeeper]], which thankfully I didn’t. Arne looked across at my pool, then told me, “sorry man.” At that point, I felt sorry for myself too, but we still had three rounds to play.
+As I built my deck, I saw Arne Huschenbeth across the table with two [[Elite Interceptor]]s (I had none) and the rest of what looked like an extremely consistent Silverquill pile. I started laughing when I contemplated registering a [[Biblioplex Tomekeeper]], which thankfully I didn’t. Arne looked across at my pool, then told me, “sorry man.” At that point, I felt sorry for myself too, but we still had three rounds to play.
 
 The first match was shockingly close against a very good Lorehold deck with [[Ark of Hunger]] and almost all of the other good Boros cards. I lost handily in Game 1, then stole Game 2 with a [[Scheming Silvertongue]] that grew to a 5/7 with Graduation Day triggers.
 
@@ -278,19 +278,19 @@ I found a pretty crisp line with [[Harsh Annotation]] on my 3/3 [[Scolding Admin
 
 I untapped and went for [[Dig Site Inventory]] on one of my 3/3 flyers, the [[Sneering Shadewriter]]. Unfortunately, this unlocked the [[Repel Calamity]] in his hand to kill it, while [[Ajani's Response]] killed my other attacking 3/3 flyer. Instead of dying to a swing where I’d done absolutely nothing, he took only 1. He found removal for the last flyer a turn later, and I died horribly a few turns after that.
 
-I took a long walk and put my head down for a while after that loss. I could’ve stolen the match from an undoubtedly better deck, and instead I threw it away on a bad pump spell. In hindsight, I think I was trying to play around a second Ajani's Response because he had six mana, but that was completely unreasonable given the texture of his hand. This was probably the most disappointed I’d been in my gameplay in a long time — maybe ever.
+I took a long walk and put my head down for a while after that loss. I could’ve stolen the match from an undoubtedly better deck, and instead I threw it away on a bad pump spell. In hindsight, I think I was trying to play around a second Ajani's Response because he had six mana, but that was completely unreasonable given the texture of his hand. This was probably the most disappointed I’d been in my gameplay in a long time, maybe ever.
 
 After blasting some music through my headphones to reset mentally, I came back for the second round. I was paired against Luis Salvatto, who had drafted a Witherbloom pile. The games weren’t particularly interesting, but I got there in three off the back of [[Render Speechless]] and some mulligans from Luis.
 
 For the last match, I was paired against Jean-Emmanuel Depraz in a Silverquill mirror. In Game 1, I landed a [[Stirring Hopesinger]] on turn five and immediately got two Repartee triggers, which effectively ended the game. The card didn’t pass the groan test from JED, which suggests to me that it isn’t very fun to play against.
 
-In Game 2, I landed Hopesinger again, but he had an answer. I bought it back with [[Pull from the Grave]] — an important card to this story — then recast it, but he had another kill spell and the game returned to parity. A few turns later, as I was behind on board, I cast [[Render Speechless]]. He tried to cast [[Pull from the Grave]] at instant speed in response, but I pointed out that it was a sorcery. He shook his head and acknowledged the punt, and I ended up making him discard the Pull. The missed card of value became the difference in the match as I drained him out with two [[Sneering Shadewriter]]s.
+In Game 2, I landed Hopesinger again, but he had an answer. I bought it back with [[Pull from the Grave]] (an important card to this story), then recast it, but he had another kill spell and the game returned to parity. A few turns later, as I was behind on board, I cast [[Render Speechless]]. He tried to cast [[Pull from the Grave]] at instant speed in response, but I pointed out that it was a sorcery. He shook his head and acknowledged the punt, and I ended up making him discard the Pull. The missed card of value became the difference in the match as I drained him out with two [[Sneering Shadewriter]]s.
 
 In my second draft, punting really was a two-way street.
 
 ## One Last Dance
 
-At 8-3, I played my next constructed match on coverage against Shota Yasooka. You can find the coverage [here](https://www.youtube.com/live/OR9T6svJRyw?si=dHtwekfuNtL7z1FV&t=13357) if you’re curious, but the extremely brief summary is that I curved out very well in Game 1, and in Game 2, he got stuck on lands — a little extra stuck because of a turn-three [[Magmatic Hellkite]].
+At 8-3, I played my next constructed match on coverage against Shota Yasooka. You can find the coverage [here](https://www.youtube.com/live/OR9T6svJRyw?si=dHtwekfuNtL7z1FV&t=13357) if you’re curious, but the extremely brief summary is that I curved out very well in Game 1, and in Game 2, he got stuck on lands (a little extra stuck because of a turn-three [[Magmatic Hellkite]]).
 
 I ended up splitting my last four constructed matches 2-2. I beat Four-Color Elementals to requalify for the Pro Tour, then lost a very one-sided match to Christoffer Larsen on Selesnya Landfall. After that, I dreamcrushed an Izzet Prowess pair-down who was playing for a Top 8 lock, then lost my Worlds win-and-in to a lower-to-the-ground Izzet Prowess deck that drew close to the nuts both games.
 
@@ -298,6 +298,6 @@ As someone on coverage put it: “dance with the girl that brought you.” Boros
 
 As I’ve alluded to throughout this piece, I think playing a deck that I enjoyed and could pilot about as well as anyone gave me a lot of equity. Many players analyze metagame breakdowns and pick decks mostly based on what looks good in the field, but player skill and familiarity can be just as important, if not more so. If you need more evidence, check out Zevin Faust’s win rates on Azorius Prison and try to explain them away without statistical significance.
 
-I’m self-aware enough to admit that I can’t match the reps many pilots have on established metagame decks, so I’m naturally drawn to alternative decks as a way to sidestep that gap. The Pro Tour didn’t convince me that everyone should register strange cards for the sake of it. But it did remind me that knowing your deck deeply — knowing its weird angles, its bad cards, its unintuitive outs — is a real edge. In this Standard format, Boros Dragons ended up being an excellent fit for me, and I’ll always be grateful it was the deck I brought.
+I’m self-aware enough to admit that I can’t match the reps many pilots have on established metagame decks, so I’m naturally drawn to alternative decks as a way to sidestep that gap. The Pro Tour didn’t convince me that everyone should register strange cards for the sake of it. But it did remind me that knowing your deck deeply, understanding its weird angles, accepting its bad cards, and playing to its unintuitive outs is a real edge. In this Standard format, Boros Dragons ended up being an excellent fit for me, and I’ll always be grateful it was the deck I brought.
 
 Momo says thanks for listening. Don’t be afraid to play bad cards sometimes. If you know them and believe in them more than everyone else, they might just take you somewhere you could only imagine.
