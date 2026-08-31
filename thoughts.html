@@ -6,7 +6,7 @@
     <title>Thoughts - Wentong Zhang</title>
     <meta name="description" content="Essays and notes by Wentong Zhang.">
     <link rel="canonical" href="https://www.wentongzhang.com/thoughts.html">
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/assets/favicon.svg?v=3" type="image/svg+xml">
     <meta property="og:title" content="Thoughts - Wentong Zhang">
     <meta property="og:description" content="Essays and notes by Wentong Zhang.">
     <meta property="og:type" content="website">
@@ -19,6 +19,7 @@
     <style>
         html {
             scroll-behavior: smooth;
+            scrollbar-gutter: stable;
         }
     </style>
 </head>
@@ -28,15 +29,11 @@
     <!-- Thoughts Page -->
     <section class="min-h-screen py-12 sm:py-20 pt-20 sm:pt-32">
         <div class="max-w-3xl mx-auto px-4 sm:px-6">
-            <div class="max-w-2xl mb-10 sm:mb-12">
-                <h1 class="text-3xl sm:text-4xl font-light text-gray-900 tracking-wide">Thoughts</h1>
-            </div>
-            <!-- Blog Posts Container -->
-            <div id="blogPosts">
-                <div class="space-y-4">
-                    <div class="bg-white border border-gray-100 rounded-lg p-6 sm:p-8 shadow-sm">
-                        <p class="text-gray-500 text-sm sm:text-base">Loading posts...</p>
-                    </div>
+            <div class="max-w-2xl">
+                <h1 class="text-lg sm:text-xl text-gray-700 mb-6 sm:mb-8 leading-loose">Thoughts</h1>
+                <!-- Blog Posts Container -->
+                <div id="blogPosts">
+                    <p class="text-gray-500 text-sm sm:text-base">Loading posts...</p>
                 </div>
             </div>
         </div>
@@ -45,7 +42,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="shared/meta.js"></script>
     <script src="shared/utils.js"></script>
-    <script src="shared/nav.js"></script>
+    <script src="shared/nav.js?v=4"></script>
     <script>
         // Initialize navigation
         initNavigation('thoughts');
@@ -118,32 +115,27 @@
             // Check if there are no posts to display
             if (blogPosts.length === 0) {
                 container.innerHTML = `
-                    <div class="bg-white rounded-lg p-6 sm:p-8 shadow-sm text-center">
-                        <p class="text-gray-600 text-base sm:text-lg">Check back later for posts, nothing here currently.</p>
-                    </div>
+                    <p class="text-gray-600 text-sm sm:text-base leading-relaxed">Check back later for posts, nothing here currently.</p>
                 `;
                 return;
             }
 
             blogPosts.forEach(post => {
-                const postElement = document.createElement('a');
-                postElement.href = `post.html?slug=${encodeURIComponent(post.slug)}`;
-                postElement.className = 'group block bg-white border border-gray-100 rounded-lg p-5 sm:p-7 mb-5 sm:mb-6 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2';
+                const postElement = document.createElement('article');
+                postElement.className = 'mb-6 sm:mb-8 last:mb-0';
 
-                const preview = excerptMarkdown(post.content, 210);
-                const tagHtml = post.tags.map(tag => `<span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">${tag}</span>`).join('');
+                const tagText = post.tags.join(', ');
 
                 postElement.innerHTML = `
-                    <div class="mb-3 flex flex-wrap items-center gap-2">
-                        <time class="text-xs sm:text-sm text-gray-500">${post.date}</time>
-                        ${tagHtml ? `<span class="text-gray-300">/</span><div class="flex flex-wrap gap-2">${tagHtml}</div>` : ''}
+                    <h2 class="text-sm sm:text-base font-medium leading-relaxed mb-1">
+                        <a href="post.html?slug=${encodeURIComponent(post.slug)}" class="text-gray-800 hover:text-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-sm">${post.title}</a>
+                    </h2>
+                    <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-500">
+                        <time>${post.date}</time>
+                        ${tagText ? `<span class="text-gray-300">·</span><span>${tagText}</span>` : ''}
                     </div>
-                    <h2 class="text-xl sm:text-2xl font-medium text-gray-900 mb-3 tracking-wide group-hover:text-blue-700 transition-colors duration-200">${post.title}</h2>
-                    <p class="text-gray-600 leading-relaxed mb-4 text-sm sm:text-base">${preview}</p>
-                    <span class="text-blue-600 font-medium group-hover:text-blue-700 transition-colors duration-200 text-sm sm:text-base">Read more →</span>
                 `;
 
-                postElement.setAttribute('aria-label', `Read ${post.title}`);
                 container.appendChild(postElement);
             });
         }

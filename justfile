@@ -1,8 +1,16 @@
 # Personal Website Justfile
 
-# Serve locally with python (no docker needed)
+# Start the Astro development server.
 serve port="8080":
-    python3 -m http.server {{port}}
+    npm run dev -- --host 0.0.0.0 --port {{port}}
+
+# Build the static site.
+build:
+    npm run build
+
+# Preview the production build locally.
+preview port="8080":
+    npm run preview -- --host 0.0.0.0 --port {{port}}
 
 # Build and start the Docker container
 deploy:

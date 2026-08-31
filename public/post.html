@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://www.wentongzhang.com/thoughts/">
+    <title>Thoughts - Wentong Zhang</title>
+  </head>
+  <body>
+    <p><a href="/thoughts/">Continue to Thoughts</a></p>
+    <script>
+      const ids = {
+        1: 'less-than-ten-years',
+        2: 'on-working-with-agents',
+        3: 'a-hope-a-dreamdew-and-a-pro-tour'
+      };
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug') || ids[params.get('id')] || '';
+      const target = slug ? `/thoughts/${encodeURIComponent(slug)}/` : '/thoughts/';
+      window.location.replace(target);
+    </script>
+  </body>
+</html>

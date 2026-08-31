@@ -1,0 +1,19 @@
+---
+import { marked } from 'marked';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import aboutMarkdown from '../../content/about.md?raw';
+
+const aboutHtml = await marked.parse(aboutMarkdown);
+---
+
+<BaseLayout
+  title="Wentong Zhang"
+  description="Wentong Zhang's personal website, with writing on software, systems, games, and Magic."
+  active="about"
+>
+  <main class="page-section">
+    <div class="site-shell">
+      <div class="content-column content-copy about-content" set:html={aboutHtml} />
+    </div>
+  </main>
+</BaseLayout>

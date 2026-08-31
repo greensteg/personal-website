@@ -1,0 +1,19 @@
+---
+import { marked } from 'marked';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import contactMarkdown from '../../../content/contact.md?raw';
+
+const contactHtml = await marked.parse(contactMarkdown);
+---
+
+<BaseLayout
+  title="Contact - Wentong Zhang"
+  description="Contact Wentong Zhang."
+  active="contact"
+>
+  <main class="page-section">
+    <div class="site-shell">
+      <div class="content-column content-copy" set:html={contactHtml} />
+    </div>
+  </main>
+</BaseLayout>

@@ -1,2 +1,5 @@
 caddy_data/
 caddy_config/
+node_modules/
+dist/
+.astro/

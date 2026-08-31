@@ -1,117 +1,98 @@
-# Personal Website - Project Overview
+# Personal Website
 
-## Project Description
-A minimalist personal portfolio website for Wentong Zhang, featuring an about page, blog (thoughts), and contact information. The site uses a clean, simple design with vanilla JavaScript and Tailwind CSS for styling.
+## Overview
 
-## Tech Stack
-- **Frontend Framework**: Vanilla JavaScript (no framework)
-- **Styling**: Tailwind CSS (via CDN)
-- **Markdown Processing**: marked.js (via CDN)
-- **Build System**: None (static site)
-- **Package Manager**: None (no package.json)
-- **Version Control**: Git
+Wentong Zhang's minimalist personal website, built with Astro and deployed as a static Caddy site. Astro generates the About, Thoughts, Contact, and individual post pages at build time. There is no production Node server.
 
-## Project Structure
+## Stack
+
+- Astro, static output
+- TypeScript
+- Plain global CSS
+- Markdown content collections
+- `marked` for trusted build-time Markdown rendering
+- Caddy in Docker for production hosting
+
+## Project structure
+
+```text
+src/
+  components/Nav.astro
+  layouts/BaseLayout.astro
+  lib/content.ts
+  pages/
+    index.astro
+    contact/index.astro
+    thoughts/index.astro
+    thoughts/[slug].astro
+  styles/global.css
+content/
+  about.md
+  contact.md
+  posts/*.md
+public/
+  assets/
+  scripts/mtg.js
+Dockerfile
+Caddyfile
 ```
-/
-├── index.html           # About page (main landing)
-├── thoughts.html        # Blog listing page
-├── post.html           # Individual blog post viewer
-├── contact.html        # Contact page
-├── content/            # Markdown content files
-│   ├── about.md       # About page content
-│   ├── contact.md     # Contact page content
-│   └── posts/         # Blog posts
-│       ├── index.json # Posts registry
-│       └── post-1.md  # Example blog post
-├── shared/            # Shared JavaScript utilities
-│   ├── nav.js        # Navigation component
-│   └── utils.js      # Markdown parsing and rendering utilities
-├── Dockerfile          # Caddy 2 container image
-├── docker-compose.yml  # Container orchestration
-├── Caddyfile           # Web server config (domain, HTTPS, caching)
-├── justfile            # Task runner commands
-└── scripts/
-    ├── deploy.sh       # Build and start container
-    └── autodeploy.sh   # Manage cron-based auto-deploy
+
+The root-level HTML and `shared/` files are the pre-Astro implementation. They are retained temporarily for comparison during migration, but are not included in the production image.
+
+## Development
+
+```sh
+npm install
+npm run dev
+npm run check
+npm run build
 ```
 
-## Key Features
-1. **Dynamic Navigation**: Shared navigation component automatically inserted on all pages
-2. **Markdown Content**: All content stored as markdown files for easy editing
-3. **Blog System**: Auto-discovery of posts from `index.json` registry
-4. **Front Matter Support**: Blog posts support YAML front matter for metadata
-5. **Responsive Design**: Mobile-friendly using Tailwind CSS
+`just serve 4173` starts the development server on port 4173. `just preview 4173` serves the production build locally.
 
-## Code Conventions
+## Content
 
-### HTML Structure
-- Each page follows the same template with navigation placeholder
-- Uses semantic HTML5 elements
-- Tailwind classes for all styling (no custom CSS except smooth scrolling)
+Posts live in `content/posts/*.md` and are discovered automatically by the content collection configured in `src/content.config.ts`. Do not manually register posts in `content/posts/index.json`; it is part of the retired static implementation.
 
-### JavaScript Patterns
-- Modular approach with shared utilities
-- Functions use async/await for content loading
-- DOM manipulation after DOMContentLoaded event
-- No external dependencies beyond CDN libraries
+Post frontmatter:
 
-### Content Management
-- All content in markdown format
-- Blog posts require front matter with:
-  - `title`: Post title
-  - `date`: Publication date
-  - `id`: Unique numeric identifier
-- Posts registry in `content/posts/index.json` lists all post files
+```yaml
+---
+title: "Post title"
+date: "Month D, YYYY"
+id: 4
+display: true
+tags: "Category, Another Category"
+---
+```
 
-### Styling Approach
-- Tailwind utility classes applied via JavaScript after markdown rendering
-- Color scheme: 
-  - Background: `bg-slate-50` (updated from gray-50)
-  - Links: `text-blue-600` with `hover:text-blue-700`
-  - Text: Gray palette for content
-- Typography: 
-  - Headings: `tracking-wide` for better spacing
-  - Paragraphs: `leading-loose` for improved readability
-- Interactive elements:
-  - Post cards: `hover:scale-[1.02]` transform animation
-  - Focus states: Ring styling for accessibility
-  - Transitions: `duration-200` for smooth animations
-- Container width: `max-w-3xl` (reduced from max-w-4xl)
+`display: false` excludes a post from both the listing and generated routes. Clean post slugs are derived from titles.
 
-## Hosting & Deployment
-- **Domain**: www.wentongzhang.com (bare domain redirects to www)
-- **Server**: Self-hosted on CentOS Stream 10 via Docker + Caddy 2
-- **HTTPS**: Auto-provisioned by Caddy via Let's Encrypt
-- **DNS**: Cloudflare (DNS-only mode, not proxied)
-- **Auto-deploy**: Cron job checks every minute for new commits on main, pulls and rebuilds automatically
-  - Enable: `just autodeploy-on`
-  - Disable: `just autodeploy-off`
-  - Check: `just autodeploy-status`
+### Magic card syntax
 
-### Useful commands (via justfile)
-- `just deploy` — build and start container
+- `[[Card Name]]` creates a Scryfall-backed card link and preview.
+- `[[Card Name|Custom label]]` uses custom visible text.
+- Fenced `deck` blocks create interactive deck lists.
+
+Build-time preprocessing is in `src/lib/content.ts`. Browser-side card lookup and deck enhancement are in `public/scripts/mtg.js`.
+
+## Routes
+
+- `/` — About
+- `/thoughts/` — Posts
+- `/thoughts/<slug>/` — Generated post
+- `/contact/` — Contact
+
+Static compatibility pages preserve `/thoughts.html`, `/contact.html`, and `/post.html?slug=...` by redirecting them to the clean routes.
+
+## Deployment
+
+The Dockerfile uses a Node build stage to run `npm ci` and `npm run build`, then copies `dist/` into the existing Caddy image. The host only needs Docker; Astro is not installed globally and does not run in production.
+
+- `just deploy` — build and start the container
 - `just redeploy` — rebuild after changes
-- `just stop` — stop container
-- `just logs` — view container logs
-- `just status` — check container status
-- `just serve` — local dev server (port 8080)
+- `just stop` — stop the container
+- `just logs` — view logs
+- `just status` — inspect container status
 
-## Development Workflow
-- No build process required
-- Direct file editing
-- Push to main to auto-deploy (within ~1 minute)
-- Add new blog posts by:
-  1. Creating markdown file in `content/posts/`
-  2. Adding file path to `content/posts/index.json`
-  3. Including proper front matter
-
-## Testing
-- Manual browser testing
-- No automated test suite present
-
-## Known Limitations
-- No server-side rendering
-- No build optimization (relies on CDN)
-- Limited SEO optimization
-- Basic blog functionality (no tags, categories, search)
+The existing cron deployment pulls `main` and rebuilds the Docker image.

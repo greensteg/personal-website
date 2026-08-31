@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { excerptMarkdown, preprocessMarkdown, slugify } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: slugify(post.data.title) },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const processed = preprocessMarkdown(post.body || '');
+const articleHtml = await marked.parse(processed.markdown);
+const description = excerptMarkdown(post.body || '');
+---
+
+<BaseLayout
+  title={`${post.data.title} - Wentong Zhang`}
+  description={description}
+  active="thoughts"
+  type="article"
+>
+  <main class="page-section">
+    <div class="site-shell">
+      <a class="back-link" href="/thoughts/">← Back to Thoughts</a>
+      <article class="content-column">
+        <time class="post-date">{post.data.date}</time>
+        <h1 class="post-title">{post.data.title}</h1>
+        <div class="article-content" set:html={articleHtml} />
+      </article>
+    </div>
+  </main>
+
+  <script is:inline src="/scripts/mtg.js"></script>
+  <script is:inline define:vars={{ decks: processed.decks }}>
+    const content = document.querySelector('.article-content');
+    if (content && window.MtgContent) {
+      content.__mtgDecks = decks;
+      window.MtgContent.enhanceMtgContent(content);
+    }
+  </script>
+</BaseLayout>

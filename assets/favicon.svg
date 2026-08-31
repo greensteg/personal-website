@@ -1,4 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#0f172a"/>
-  <path fill="#f8fafc" d="M13 18h7l5 26 7-26h6l7 26 5-26h7l-8 32h-7l-7-24-7 24h-7L13 18z"/>
+  <style>
+    .mark { stroke: #0f172a; }
+    @media (prefers-color-scheme: dark) {
+      .mark { stroke: #f8fafc; }
+    }
+  </style>
+  <g class="mark" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 17.5l6.5 29 8-19 8 19 6.5-29"/>
+    <path d="M40 17.5h17L40 46.5h18"/>
+  </g>
 </svg>

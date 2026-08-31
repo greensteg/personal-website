@@ -39,14 +39,17 @@ www.wentongzhang.com {
 	file_server
 	encode gzip
 
-	# SPA-friendly: try the file, then fall back to index.html
+	# Serve Astro's generated directories, with the homepage as a final fallback.
 	try_files {path} {path}/ /index.html
 
-	# Revalidate content pages and post data so article updates show up promptly.
-	@content path / *.html *.md *.json /shared/*.js
-	header @content Cache-Control "no-cache"
+	# Revalidate generated HTML so publishing a new build is visible promptly.
+	@html path / *.html */
+	header @html Cache-Control "no-cache"
 
-	# Cache static assets
-	@static path *.css *.svg *.png *.jpg *.ico
+	# Astro fingerprints build assets; long-lived caching is safe for those files.
+	@immutable path /_astro/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+	@static path /assets/* /scripts/*
 	header @static Cache-Control "public, max-age=3600"
 }

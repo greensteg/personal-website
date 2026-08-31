@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { slugify, tagsFrom } from '../../lib/content';
+
+const posts = (await getCollection('posts'))
+  .filter((post) => post.data.display)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<BaseLayout
+  title="Thoughts - Wentong Zhang"
+  description="Essays and notes by Wentong Zhang."
+  active="thoughts"
+>
+  <main class="page-section">
+    <div class="site-shell">
+      <div class="content-column">
+        <h1 class="page-heading">Thoughts</h1>
+        <div class="thought-list">
+          {posts.map((post) => {
+            const tags = tagsFrom(post.data.tags);
+            return (
+              <article class="thought-item">
+                <h2>
+                  <a class="post-link" href={`/thoughts/${slugify(post.data.title)}/`}>
+                    {post.data.title}
+                  </a>
+                </h2>
+                <div class="post-meta">
+                  <time>{post.data.date}</time>
+                  {tags.length > 0 && <span class="meta-separator">·</span>}
+                  {tags.length > 0 && <span>{tags.join(', ')}</span>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

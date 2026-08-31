@@ -1,0 +1,29 @@
+---
+interface Props {
+  active?: 'about' | 'thoughts' | 'contact';
+}
+
+const { active } = Astro.props;
+const links = [
+  { href: '/', label: 'About', key: 'about' },
+  { href: '/thoughts/', label: 'Thoughts', key: 'thoughts' },
+  { href: '/contact/', label: 'Contact', key: 'contact' }
+] as const;
+---
+
+<nav class="site-header" aria-label="Primary navigation">
+  <div class="site-shell header-inner">
+    <a class="site-name" href="/">Wentong Zhang</a>
+    <div class="nav-links">
+      {links.map((link) => (
+        <a
+          class:list={['nav-link', { active: active === link.key }]}
+          href={link.href}
+          aria-current={active === link.key ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>

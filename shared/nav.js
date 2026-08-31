@@ -6,11 +6,11 @@ function createNavigation(currentPage = '') {
     nav.innerHTML = `
         <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
             <div class="flex justify-between items-center">
-                <a href="index.html" class="font-semibold text-base sm:text-lg tracking-wide hover:text-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Wentong Zhang</a>
-                <div class="flex space-x-3 sm:space-x-6">
-                    <a href="index.html" class="nav-link ${currentPage === 'about' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm sm:text-base">About</a>
-                    <a href="thoughts.html" class="nav-link ${currentPage === 'thoughts' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm sm:text-base">Thoughts</a>
-                    <a href="contact.html" class="nav-link ${currentPage === 'contact' ? 'text-blue-600 font-medium' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm sm:text-base">Contact</a>
+                <a href="index.html" class="font-normal text-lg max-[374px]:text-base sm:text-xl tracking-tight text-gray-900 hover:text-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded">Wentong Zhang</a>
+                <div class="flex space-x-3 max-[374px]:space-x-2 sm:space-x-6">
+                    <a href="index.html" class="nav-link ${currentPage === 'about' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm max-[374px]:text-xs sm:text-base">About</a>
+                    <a href="thoughts.html" class="nav-link ${currentPage === 'thoughts' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm max-[374px]:text-xs sm:text-base">Thoughts</a>
+                    <a href="contact.html" class="nav-link ${currentPage === 'contact' ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'} transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-1 sm:px-2 py-1 text-sm max-[374px]:text-xs sm:text-base">Contact</a>
                 </div>
             </div>
         </div>
