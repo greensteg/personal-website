@@ -7,12 +7,11 @@ const ui = {
   password: byId('password'),
   entryStatus: byId('entry-status'),
   wall: byId('wall'),
-  home: byId('home'),
   logout: byId('logout'),
   timeline: byId('timeline'),
   wallHeading: byId('wall-heading'),
-  wallIntro: byId('wall-intro'),
   wallStatus: byId('wall-status'),
+  writerActions: byId('writer-actions'),
   views: byId('views'),
   write: byId('write'),
   notes: byId('notes'),
@@ -57,12 +56,12 @@ const dateFormat = new Intl.DateTimeFormat(undefined, {
 });
 
 function message(target, text = '', error = false) {
-  target.textContent = text;
+  target.textContent = text.toLowerCase();
   target.classList.toggle('error', error);
 }
 
 function loginMessage(text = '', invalid = false) {
-  ui.entryStatus.textContent = text;
+  ui.entryStatus.textContent = text.toLowerCase();
   ui.password.setAttribute('aria-invalid', String(invalid));
 }
 
@@ -77,7 +76,7 @@ async function request(path, method = 'GET', payload) {
 
   if (!response.ok) {
     if (response.status === 401 && state.role) setSession(null);
-    throw new Error(result?.error || 'Something went wrong. Please try again.');
+    throw new Error(result?.error || 'something went wrong. please try again.');
   }
   return result;
 }
@@ -93,9 +92,6 @@ function setSession(role) {
   ui.entry.hidden = Boolean(role);
   ui.login.hidden = Boolean(role);
   ui.wall.hidden = !role;
-  ui.write.hidden = role !== 'author';
-  ui.views.hidden = role !== 'author';
-  ui.wallIntro.textContent = role === 'author' ? 'Drafts are only visible to you.' : '';
   loginMessage();
   message(ui.wallStatus);
 
@@ -108,7 +104,7 @@ function setSession(role) {
 async function refreshNotes(feedback = '') {
   const version = state.sessionVersion;
   const requestNumber = ++state.notesRequest;
-  message(ui.wallStatus, feedback || 'Opening notes…');
+  message(ui.wallStatus, feedback || 'opening notes…');
   try {
     const result = await request('/api/notes');
     if (version !== state.sessionVersion || requestNumber !== state.notesRequest) return;
@@ -123,6 +119,8 @@ async function refreshNotes(feedback = '') {
 }
 
 function showTimeline(focus = false) {
+  ui.writerActions.hidden = state.role !== 'author';
+  ui.back.hidden = true;
   ui.timeline.hidden = false;
   ui.editor.hidden = true;
   if (focus) ui.wallHeading.focus();
@@ -144,9 +142,9 @@ function renderNotes() {
     const heading = document.createElement('h2');
     empty.className = 'empty';
     if (state.view === 'draft') {
-      heading.textContent = 'No drafts yet';
+      heading.textContent = 'no drafts yet';
     } else {
-      heading.textContent = state.role === 'author' ? 'No published notes yet' : 'No notes here yet';
+      heading.textContent = state.role === 'author' ? 'no published notes yet' : 'no notes here yet';
     }
     empty.append(heading);
     ui.notes.append(empty);
@@ -159,7 +157,7 @@ function renderNotes() {
     const time = card.querySelector('time');
     if (date) {
       time.dateTime = date;
-      time.textContent = dateFormat.format(new Date(date));
+      time.textContent = dateFormat.format(new Date(date)).toLocaleLowerCase();
     }
     const title = card.querySelector('.note-title');
     title.textContent = note.title;
@@ -178,7 +176,7 @@ function renderNotes() {
     if (state.role === 'author') {
       const edit = card.querySelector('.note-edit');
       edit.hidden = false;
-      edit.setAttribute('aria-label', 'Edit ' + (note.title || 'note from ' + time.textContent));
+      edit.setAttribute('aria-label', 'edit ' + (note.title || 'note from ' + time.textContent));
       edit.addEventListener('click', () => openEditor(note));
     }
     ui.notes.append(card);
@@ -203,11 +201,13 @@ function openEditor(note = null) {
   state.editing = note;
   ui.title.value = note?.title || '';
   ui.body.value = note?.body || '';
-  ui.editorHeading.textContent = note ? 'Edit note' : 'New note';
-  ui.publish.textContent = note?.status === 'published' ? 'Save changes' : 'Publish';
-  ui.draft.textContent = note?.status === 'published' ? 'Move to drafts' : 'Save draft';
+  ui.editorHeading.textContent = note ? 'edit note' : 'new note';
+  ui.publish.textContent = note?.status === 'published' ? 'save changes' : 'publish';
+  ui.draft.textContent = note?.status === 'published' ? 'move to drafts' : 'save draft';
   ui.delete.hidden = !note;
   if (note?.hasPhoto) showPhoto(photoPath(note.id));
+  ui.writerActions.hidden = true;
+  ui.back.hidden = false;
   ui.timeline.hidden = true;
   ui.editor.hidden = false;
   ui.editorHeading.focus();
@@ -223,7 +223,6 @@ function setEditorBusy(busy) {
   ui.removePhoto.disabled = busy || state.photoPending;
   ui.delete.disabled = busy;
   ui.back.disabled = busy;
-  ui.home.disabled = busy;
   ui.logout.disabled = busy;
 }
 
@@ -258,7 +257,7 @@ function confirmAction(title, copy, accept) {
 
 async function canLeaveEditor() {
   return ui.editor.hidden || !editorChanged() ||
-    confirmAction('Discard unsaved changes?', 'Changes since your last save will be lost.', 'Discard changes');
+    confirmAction('discard unsaved changes?', 'changes since your last save will be lost.', 'discard changes');
 }
 
 async function leaveEditor() {
@@ -276,24 +275,24 @@ async function saveNote(status) {
 
   const hasPhoto = state.photoUpdate === undefined ? note?.hasPhoto : Boolean(state.photoUpdate);
   if (status === 'published' && !payload.title.trim() && !payload.body.trim() && !hasPhoto) {
-    message(ui.editorStatus, 'Add a title, some words, or a photo to publish.', true);
+    message(ui.editorStatus, 'add a title, note, or photo to publish.', true);
     ui.body.focus();
     return;
   }
   if (note?.status === 'published' && status === 'draft' &&
-      !await confirmAction('Move this note to drafts?', 'The reader will no longer see it.', 'Move to drafts')) {
+      !await confirmAction('move this note to drafts?', 'only you can view drafts.', 'move to drafts')) {
     return;
   }
 
   setEditorBusy(true);
-  message(ui.editorStatus, 'Saving…');
+  message(ui.editorStatus, 'saving…');
   try {
     await request(note ? '/api/notes/' + encodeURIComponent(note.id) : '/api/notes', note ? 'PUT' : 'POST', payload);
     if (version !== state.editorVersion) return;
     resetEditor();
     state.view = status;
     showTimeline(true);
-    const feedback = status === 'draft' ? 'Draft saved.' : note?.status === 'published' ? 'Changes saved.' : 'Note published.';
+    const feedback = status === 'draft' ? 'draft saved.' : note?.status === 'published' ? 'changes saved.' : 'note published.';
     await refreshNotes(feedback);
   } catch (error) {
     if (version === state.editorVersion) message(ui.editorStatus, error.message, true);
@@ -306,17 +305,17 @@ async function deleteNote() {
   if (!state.editing || state.busy) return;
   const version = state.editorVersion;
   const note = state.editing;
-  if (!await confirmAction('Delete this note?', 'This permanently removes the note and its photo.', 'Delete note')) return;
+  if (!await confirmAction('delete this note?', 'this permanently removes the note and its photo.', 'delete note')) return;
 
   setEditorBusy(true);
-  message(ui.editorStatus, 'Deleting…');
+  message(ui.editorStatus, 'deleting…');
   try {
     await request('/api/notes/' + encodeURIComponent(note.id), 'DELETE');
     if (version !== state.editorVersion) return;
     resetEditor();
     state.view = note.status;
     showTimeline(true);
-    await refreshNotes('Note deleted.');
+    await refreshNotes('note deleted.');
   } catch (error) {
     if (version === state.editorVersion) message(ui.editorStatus, error.message, true);
   } finally {
@@ -326,7 +325,7 @@ async function deleteNote() {
 
 async function preparePhoto(file) {
   if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 25 * 1024 * 1024) {
-    throw new Error('Choose a JPEG, PNG, or WebP photo under 25 MB.');
+    throw new Error('choose a jpeg, png, or webp photo under 25 mb.');
   }
 
   const originalUrl = URL.createObjectURL(file);
@@ -334,7 +333,7 @@ async function preparePhoto(file) {
     const image = new Image();
     image.src = originalUrl;
     await image.decode();
-    if (!image.naturalWidth || !image.naturalHeight) throw new Error('This photo could not be opened.');
+    if (!image.naturalWidth || !image.naturalHeight) throw new Error('this photo could not be opened.');
 
     const ratio = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight));
     const canvas = document.createElement('canvas');
@@ -347,7 +346,7 @@ async function preparePhoto(file) {
 
     // The browser encodes the pixels into a new file without the camera metadata.
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', .86));
-    if (!blob || blob.size > 4 * 1024 * 1024) throw new Error('This photo is too large.');
+    if (!blob || blob.size > 4 * 1024 * 1024) throw new Error('this photo is too large.');
     const dataUrl = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -366,7 +365,7 @@ ui.photo.addEventListener('change', async () => {
   const version = state.editorVersion;
   state.photoPending = true;
   setEditorBusy(state.busy);
-  message(ui.editorStatus, 'Preparing photo…');
+  message(ui.editorStatus, 'preparing photo…');
   try {
     const { blob, attachment } = await preparePhoto(file);
     if (version !== state.editorVersion) return;
@@ -375,7 +374,7 @@ ui.photo.addEventListener('change', async () => {
     message(ui.editorStatus);
   } catch (error) {
     if (version === state.editorVersion) {
-      message(ui.editorStatus, error.message || 'This photo could not be opened.', true);
+      message(ui.editorStatus, error.message || 'this photo could not be opened.', true);
     }
   } finally {
     if (version === state.editorVersion) {
@@ -401,7 +400,6 @@ ui.draft.addEventListener('click', () => void saveNote('draft'));
 ui.delete.addEventListener('click', () => void deleteNote());
 ui.write.addEventListener('click', () => openEditor());
 ui.back.addEventListener('click', () => void leaveEditor());
-ui.home.addEventListener('click', () => void leaveEditor());
 
 ui.views.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-view]');
@@ -417,11 +415,11 @@ ui.login.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (ui.password.readOnly) return;
   if (!ui.password.value) {
-    loginMessage('Enter a password.', true);
+    loginMessage('enter a password.', true);
     return;
   }
   ui.password.readOnly = true;
-  loginMessage('Signing in…');
+  loginMessage('signing in…');
   try {
     const result = await request('/api/login', 'POST', { password: ui.password.value });
     setSession(result.role);
