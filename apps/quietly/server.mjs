@@ -19,6 +19,10 @@ const staticFiles = new Map([
   ["/app.js", ["app.js", "text/javascript; charset=utf-8"]],
   ["/styles.css", ["styles.css", "text/css; charset=utf-8"]],
   ["/favicon.svg", ["favicon.svg", "image/svg+xml"]],
+  ["/fonts/crimson-pro-latin.woff2", ["fonts/crimson-pro-latin.woff2", "font/woff2"]],
+  ["/fonts/crimson-pro-latin-ext.woff2", ["fonts/crimson-pro-latin-ext.woff2", "font/woff2"]],
+  ["/fonts/crimson-pro-vietnamese.woff2", ["fonts/crimson-pro-vietnamese.woff2", "font/woff2"]],
+  ["/fonts/crimson-pro-OFL.txt", ["fonts/crimson-pro-OFL.txt", "text/plain; charset=utf-8"]],
 ]);
 
 class HttpError extends Error {
