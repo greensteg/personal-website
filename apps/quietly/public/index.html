@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f4f3eb">
+  <title>quietly</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main id="entry" class="entry">
+    <div class="entry-content">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>quietly</div>
+      <div class="entry-copy">
+        <h1>quietly</h1>
+        <p class="entry-intro">A private place for notes.</p>
+        <form id="login-form" class="login-form" hidden>
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" autocomplete="current-password" required>
+          <button type="submit" class="button primary">Sign in</button>
+        </form>
+        <p id="entry-status" class="message" role="status">Checking your session…</p>
+      </div>
+    </div>
+    <div class="entry-image" aria-hidden="true"></div>
+  </main>
+
+  <div id="wall" class="wall" hidden>
+    <header class="wall-header">
+      <div class="wall-header-content">
+        <button type="button" id="home" class="brand home"><span class="brand-mark" aria-hidden="true"></span>quietly</button>
+        <button type="button" id="logout" class="button text-button">Sign out</button>
+      </div>
+    </header>
+    <main class="wall-content">
+      <section id="timeline" aria-labelledby="wall-heading">
+        <div class="timeline-head">
+          <div>
+            <h1 id="wall-heading" tabindex="-1">Notes</h1>
+            <p id="wall-intro" class="wall-intro"></p>
+          </div>
+          <button type="button" id="write" class="button primary" hidden>New note</button>
+        </div>
+        <div id="views" class="views" role="group" aria-label="Filter notes" hidden>
+          <button type="button" data-view="published" aria-pressed="true">Published</button>
+          <button type="button" data-view="draft" aria-pressed="false">Drafts</button>
+        </div>
+        <p id="wall-status" class="message" role="status"></p>
+        <div id="notes" class="note-list"></div>
+      </section>
+
+      <section id="editor" class="editor" aria-labelledby="editor-heading" hidden>
+        <div class="editor-head">
+          <h1 id="editor-heading" tabindex="-1">New note</h1>
+          <button type="button" id="back" class="button text-button">Back to notes</button>
+        </div>
+        <form id="note-form" class="note-form">
+          <label for="note-title">Title <span class="hint">Optional</span></label>
+          <input id="note-title" type="text" name="title" placeholder="Give it a title" maxlength="120">
+
+          <label for="note-body">Note</label>
+          <textarea id="note-body" name="body" rows="8" maxlength="40000" placeholder="Write what you want to leave here."></textarea>
+
+          <div class="photo-fields">
+            <label for="note-photo">Photo <span class="hint">Optional</span></label>
+            <div class="photo-actions">
+              <input id="note-photo" type="file" name="photo" accept="image/jpeg,image/png,image/webp">
+              <button type="button" id="remove-photo" class="button text-button" hidden>Remove photo</button>
+            </div>
+            <img id="photo-preview" class="photo-preview" alt="Photo for this note" hidden>
+          </div>
+
+          <p id="editor-status" class="message" role="status"></p>
+
+          <div class="editor-actions">
+            <button type="submit" id="publish" class="button primary">Publish</button>
+            <button type="button" id="save-draft" class="button secondary">Save draft</button>
+            <button type="button" id="delete" class="button text-button danger" hidden>Delete note</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <template id="note-template">
+    <article class="note">
+      <div class="note-header">
+        <time></time>
+        <button type="button" class="button text-button note-edit" hidden>Edit</button>
+      </div>
+      <h2 class="note-title"></h2>
+      <p class="note-body"></p>
+      <img class="note-photo" alt="Photo attached to this note" loading="lazy" hidden>
+    </article>
+  </template>
+
+  <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-copy">
+    <form method="dialog">
+      <h2 id="confirm-title"></h2>
+      <p id="confirm-copy"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="button secondary" autofocus>Cancel</button>
+        <button id="confirm-action" value="confirm" class="button primary">Confirm</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

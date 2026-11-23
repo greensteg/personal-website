@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    init: true
+    read_only: true
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8080"
+      QUIET_DATA_DIR: /data
+      QUIET_ORIGIN: https://quietly.wentongzhang.com
+      QUIET_AUTHOR_PASSWORD: ${QUIET_AUTHOR_PASSWORD:?Set QUIET_AUTHOR_PASSWORD in apps/quietly/.env}
+      QUIET_READER_PASSWORD: ${QUIET_READER_PASSWORD:?Set QUIET_READER_PASSWORD in apps/quietly/.env}
+    volumes:
+      - notes:/data
+    networks:
+      shared:
+        aliases: [app-quietly]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/healthz').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  notes:
+
+networks:
+  shared:
+    name: shared
+    external: true

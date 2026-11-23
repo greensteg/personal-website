@@ -6,6 +6,7 @@ dist
 .app-state
 **/__pycache__
 caddy/app-routes
+apps/
 CLAUDE.md
 justfile
 scripts

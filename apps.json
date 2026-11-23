@@ -1,1 +1,6 @@
-{}
+{
+  "quietly": {
+    "compose_file": "apps/quietly/compose.yaml",
+    "port": 8080
+  }
+}
