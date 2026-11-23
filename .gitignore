@@ -3,3 +3,7 @@ caddy_config/
 node_modules/
 dist/
 .astro/
+.app-state/
+__pycache__/
+/caddy/app-routes/*
+!/caddy/app-routes/.gitkeep

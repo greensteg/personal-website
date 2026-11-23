@@ -32,6 +32,10 @@ logs:
 status:
     docker compose ps
 
+# Preview or apply an app launch or retirement on the website host
+app action name mode="dry-run":
+    python3 -B scripts/appctl.py {{quote(action)}} {{quote(name)}} {{quote("--" + mode)}}
+
 # Run setup script and ensure git is installed
 setup:
     #!/usr/bin/env bash

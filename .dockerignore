@@ -3,6 +3,9 @@
 node_modules
 dist
 .astro
+.app-state
+**/__pycache__
+caddy/app-routes
 CLAUDE.md
 justfile
 scripts

@@ -96,3 +96,49 @@ The Dockerfile uses a Node build stage to run `npm ci` and `npm run build`, then
 - `just status` — inspect container status
 
 The existing cron deployment pulls `main` and rebuilds the Docker image.
+
+### App subdomains
+
+Register each app once in [apps.json](apps.json). The key is its subdomain label. The entry points to the app's Compose file on the host and gives the port Caddy should use inside Docker.
+
+```json
+{
+  "notes": {
+    "compose_file": "../notes/compose.yaml",
+    "port": 8080
+  }
+}
+```
+
+The `notes` entry uses Docker project `app-notes` and sends traffic for `notes.wentongzhang.com` to `app-notes:8080`. Give the app's HTTP service the name or network alias `app-notes` on the website's external `shared` network. The HTTP port can stay inside Docker. Add a health check to the HTTP service so Compose can wait for readiness.
+
+```yaml
+services:
+  web:
+    build: .
+    networks:
+      default:
+      shared:
+        aliases: [app-notes]
+
+networks:
+  shared:
+    external: true
+    name: shared
+```
+
+Put scheduled jobs in the same Compose project so they stop when the app is retired. Use named volumes or bind mounts for data that needs to survive retirement. Retirement removes the project's containers and private networks and keeps its volumes.
+
+Run the lifecycle command from the deployed website checkout on the host. It uses Python 3.9+, Docker Compose with `--dry-run` support, and `CF_API_TOKEN` with **Zone Read** and **DNS Write** for `wentongzhang.com`. Deploy the website once with the app-route mount before using the command.
+
+```sh
+just app launch notes
+just app launch notes apply
+
+just app retire notes
+just app retire notes apply
+```
+
+The default dry run shows the exact Cloudflare record action, the Caddy route diff, and Compose's preview. Launch starts the Compose project, reloads Caddy, and creates a DNS-only CNAME to `wentongzhang.com`. Retirement removes the route and DNS record before taking the project down. Cloudflare propagation and Caddy certificate issuance can take additional time.
+
+Keep the entry and its Compose file available until retirement completes. The command only changes DNS records it owns and refuses conflicting records. If a step fails, fix the reported error and rerun the same command. The website's cron deploy shares the apply lock.

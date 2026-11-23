@@ -14,6 +14,16 @@ usage() {
 case "${1:-}" in
     run)
         cd "$REPO_DIR"
+        mkdir -p .app-state
+        exec 9>>.app-state/deploy.lock
+        lock_status=0
+        flock -n -E 75 9 || lock_status=$?
+        case "$lock_status" in
+            0) ;;
+            75) exit 0 ;;
+            *) exit "$lock_status" ;;
+        esac
+
         git fetch origin main
 
         remote_sha="$(git rev-parse origin/main)"

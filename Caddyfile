@@ -21,3 +21,5 @@ www.wentongzhang.com {
 	@static path /assets/* /scripts/*
 	header @static Cache-Control "public, max-age=3600"
 }
+
+import /etc/caddy/app-routes/*.caddy
