@@ -13,20 +13,11 @@
 </head>
 <body>
   <main id="entry" class="entry">
-    <div class="entry-content">
-      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>quietly</div>
-      <div class="entry-copy">
-        <h1>quietly</h1>
-        <p class="entry-intro">A private place for notes.</p>
-        <form id="login-form" class="login-form" hidden>
-          <label for="password">Password</label>
-          <input id="password" type="password" name="password" autocomplete="current-password" required>
-          <button type="submit" class="button primary">Sign in</button>
-        </form>
-        <p id="entry-status" class="message" role="status">Checking your session…</p>
-      </div>
-    </div>
-    <div class="entry-image" aria-hidden="true"></div>
+    <form id="login-form" class="login-form" action="/api/login" method="post" novalidate hidden>
+      <input id="password" type="password" name="password" aria-label="Password"
+        autocomplete="current-password" enterkeyhint="go" required>
+    </form>
+    <p id="entry-status" class="visually-hidden" role="status"></p>
   </main>
 
   <div id="wall" class="wall" hidden>

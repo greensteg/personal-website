@@ -61,6 +61,11 @@ function message(target, text = '', error = false) {
   target.classList.toggle('error', error);
 }
 
+function loginMessage(text = '', invalid = false) {
+  ui.entryStatus.textContent = text;
+  ui.password.setAttribute('aria-invalid', String(invalid));
+}
+
 async function request(path, method = 'GET', payload) {
   const options = { method, credentials: 'same-origin', cache: 'no-store' };
   if (payload !== undefined) {
@@ -91,7 +96,7 @@ function setSession(role) {
   ui.write.hidden = role !== 'author';
   ui.views.hidden = role !== 'author';
   ui.wallIntro.textContent = role === 'author' ? 'Drafts are only visible to you.' : '';
-  message(ui.entryStatus);
+  loginMessage();
   message(ui.wallStatus);
 
   if (role) {
@@ -406,20 +411,26 @@ ui.views.addEventListener('click', (event) => {
   renderNotes();
 });
 
+ui.password.addEventListener('input', () => loginMessage());
+
 ui.login.addEventListener('submit', async (event) => {
   event.preventDefault();
-  const button = ui.login.querySelector('button');
-  button.disabled = true;
-  message(ui.entryStatus, 'Checking your session…');
+  if (ui.password.readOnly) return;
+  if (!ui.password.value) {
+    loginMessage('Enter a password.', true);
+    return;
+  }
+  ui.password.readOnly = true;
+  loginMessage('Signing in…');
   try {
     const result = await request('/api/login', 'POST', { password: ui.password.value });
     setSession(result.role);
     ui.wallHeading.focus();
   } catch (error) {
-    message(ui.entryStatus, error.message, true);
+    loginMessage(error.message, true);
     ui.password.select();
   } finally {
-    button.disabled = false;
+    ui.password.readOnly = false;
   }
 });
 
@@ -441,9 +452,11 @@ async function init() {
   try {
     const result = await request('/api/session');
     setSession(result.role);
+    if (!result.role) ui.password.focus({ preventScroll: true });
   } catch (error) {
     ui.login.hidden = false;
-    message(ui.entryStatus, error.message, true);
+    loginMessage(error.message, true);
+    ui.password.focus({ preventScroll: true });
   }
 }
 

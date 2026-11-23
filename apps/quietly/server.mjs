@@ -18,7 +18,6 @@ const staticFiles = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
   ["/app.js", ["app.js", "text/javascript; charset=utf-8"]],
   ["/styles.css", ["styles.css", "text/css; charset=utf-8"]],
-  ["/cover.webp", ["cover.webp", "image/webp"]],
   ["/favicon.svg", ["favicon.svg", "image/svg+xml"]],
 ]);
 
