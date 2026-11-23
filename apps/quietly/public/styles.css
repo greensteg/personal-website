@@ -136,7 +136,7 @@ h1, h2 { font-family: var(--serif); font-weight: 400; }
 
 .note-title {
   margin-top: .65rem;
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-size: clamp(1.3rem, 2.75vw, 1.65rem);
   line-height: 1.2;
   letter-spacing: -.025em;
   overflow-wrap: anywhere;
